@@ -15,7 +15,7 @@ internal class ExplosiveTorpedo
             Main.logger.LogError("Unable to load ExplosiveTorpedo Sprite from cache.");
 
         Info = PrefabInfo
-            .WithTechType(classId: ClassID, displayName: null, description: null, techTypeOwner: Assembly.GetExecutingAssembly())
+            .WithTechType(classId: ClassID, displayName: null, description: null, unlockAtStart: false, techTypeOwner: Assembly.GetExecutingAssembly())
             .WithSizeInInventory(new(1, 1))
             .WithIcon(icon);
 
@@ -37,10 +37,24 @@ internal class ExplosiveTorpedo
         CustomPrefab customPrefab = new(Info);
         CloneTemplate clone = new(Info, TechType.GasTorpedo);
 
+        // Add marker component to the cloned template
+        clone.ModifyPrefab += go =>
+        {
+            Main.logger.LogInfo($"[ExplosiveTorpedo] ModifyPrefab called for {go.name}");
+
+            // Use PersistentMarker instead - more robust
+            var marker = go.AddComponent<VELD.AlterraWeaponry.Behaviours.ExplosiveTorpedoPersistentMarker>();
+            Main.logger.LogInfo($"[ExplosiveTorpedo] Added ExplosiveTorpedoPersistentMarker to {go.name}");
+
+            // Also add the regular marker as backup
+            go.AddComponent<VELD.AlterraWeaponry.Behaviours.ExplosiveTorpedoMarker>();
+            Main.logger.LogInfo($"[ExplosiveTorpedo] Added ExplosiveTorpedoMarker to {go.name}");
+        };
+
         customPrefab.SetGameObject(clone);
         var scanningGadget = customPrefab.SetUnlock(BlackPowder.TechType);
         scanningGadget.WithPdaGroupCategoryAfter(TechGroup.VehicleUpgrades, TechCategory.VehicleUpgrades, TechType.GasTorpedo);
-        scanningGadget.WithCompoundTechsForUnlock([ Coal.TechType ]);
+        scanningGadget.WithCompoundTechsForUnlock([Coal.TechType]);
 
 #if BZ  // This sets the popup on BZ if it can find it.
         if (!Main.AssetsCache.TryGetAsset("UpgradePopup", out Sprite popupSprite))
@@ -54,11 +68,10 @@ internal class ExplosiveTorpedo
         }
 #endif
 
-        customPrefab.SetEquipment(EquipmentType.None);
         customPrefab.SetRecipe(recipe)
-            .WithCraftingTime(3f)
+            .WithCraftingTime(4f)
             .WithFabricatorType(CraftTree.Type.Fabricator)
-            .WithStepsToFabricatorTab("Upgrades", "ExosuitUpgrades");
+            .WithStepsToFabricatorTab("Resources", "BasicMaterials");
 
         customPrefab.Register();
     }

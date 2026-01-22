@@ -15,7 +15,7 @@ internal class BlackPowder
             Main.logger.LogError("Unable to load BlackPowder sprite from cache.");
 
         this.Info = PrefabInfo
-            .WithTechType(classId: ClassID, displayName: null, description: null, unlockAtStart: true, techTypeOwner: Assembly.GetExecutingAssembly())
+            .WithTechType(classId: ClassID, displayName: null, description: null, unlockAtStart: false, techTypeOwner: Assembly.GetExecutingAssembly())
             .WithIcon(icon)
             .WithSizeInInventory(new(1, 1));
         TechType = this.Info.TechType;
@@ -30,16 +30,15 @@ internal class BlackPowder
             [
                 new(Coal.TechType, 1),
                 new(TechType.Sulphur, 1),
-                new(TechType.JeweledDiskPiece, 3)
+                new(TechType.CoralShellPlate, 3)
             ]
         };
 
         CustomPrefab customPrefab = new(this.Info);
 
         customPrefab.SetGameObject(SetupGameObject());
-        customPrefab.SetUnlock(Coal.TechType)
-            .WithPdaGroupCategoryBefore(TechGroup.Resources, TechCategory.AdvancedMaterials, TechType.HydrochloricAcid);
-        customPrefab.SetEquipment(EquipmentType.None);
+        customPrefab.SetPdaGroupCategoryBefore(TechGroup.Resources, TechCategory.AdvancedMaterials, TechType.HydrochloricAcid);
+        // Do not call SetEquipment for non-equippable items
         customPrefab.SetRecipe(recipe)
             .WithCraftingTime(2.5f)
             .WithFabricatorType(CraftTree.Type.Fabricator)
@@ -59,15 +58,15 @@ internal class BlackPowder
         Main.logger.LogDebug("Setting up BlackPowder GameObject.");
         Main.logger.LogDebug("Setting shaders.");
         var renderer = AssetPrefab.EnsureComponent<MeshRenderer>();
-        foreach(var mat in renderer.materials)
+        foreach (var mat in renderer.materials)
         {
             if (Main.AssetsCache.TryGetAsset("BlackPowder", out Texture2D albedo))
                 mat.SetTexture(ShaderPropertyID._MainTex, albedo);
 
-            if(Main.AssetsCache.TryGetAsset("BlackPowder_spec", out Texture2D speculars))
+            if (Main.AssetsCache.TryGetAsset("BlackPowder_spec", out Texture2D speculars))
                 mat.SetTexture(ShaderPropertyID._SpecTex, speculars);
 
-            if(Main.AssetsCache.TryGetAsset("BlackPowder_normals", out Texture2D normals))
+            if (Main.AssetsCache.TryGetAsset("BlackPowder_normals", out Texture2D normals))
                 mat.SetTexture(ShaderPropertyID._NormalsTex, normals);
         }
         MaterialUtils.ApplySNShaders(AssetPrefab);

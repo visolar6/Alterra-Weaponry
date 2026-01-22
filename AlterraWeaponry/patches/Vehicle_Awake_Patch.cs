@@ -1,4 +1,6 @@
-﻿namespace VELD.AlterraWeaponry.Patches;
+﻿#if SN1
+
+namespace VELD.AlterraWeaponry.Patches;
 
 [HarmonyPatch(typeof(Vehicle))]
 public class Vehicle_Awake_Patch // Thanks to Grimm The Second !
@@ -19,3 +21,5 @@ public class Vehicle_Awake_Patch // Thanks to Grimm The Second !
         }).ToArray();
     }
 }
+
+#endif

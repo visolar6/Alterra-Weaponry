@@ -1,4 +1,4 @@
-﻿#if SN1
+﻿#if BZ
 namespace VELD.AlterraWeaponry.Patches;
 
 [HarmonyPatch(typeof(SeaMoth))]

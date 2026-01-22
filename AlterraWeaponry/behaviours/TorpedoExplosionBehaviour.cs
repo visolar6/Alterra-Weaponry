@@ -9,7 +9,7 @@ public class TorpedoExplosionBehaviour : MonoBehaviour
     public void Start()
     {
         Main.logger.LogInfo("Releasing explosion !");
-        DamageSystem.RadiusDamage((250f * Main.Options.dmgMultiplier), gameObject.transform.position, 10f, DamageType.Explosive, gameObject);
+        DamageSystem.RadiusDamage((250f * Main.Options.explosionDamageMultiplier), gameObject.transform.position, 10f, DamageType.Explosive, gameObject);
 #if BELOWZERO
         try
         {
@@ -26,9 +26,9 @@ public class TorpedoExplosionBehaviour : MonoBehaviour
             Main.logger.LogError($"An error has occured while exploding the torpedo.\n{e}");
         }
 #elif SUBNAUTICA
-        global::Utils.PlayOneShotPS(GameObject.Instantiate<LavaLizard>(new LavaLizard()).GetComponent<LavaLiazardRangedAttack>().attackStartFXcontrol.emitters[0].fx, base.gameObject.transform.position, base.gameObject.transform.rotation, null);
+        // FX loading is optional - damage is applied above and is what matters
 #endif
-        Destroy(gameObject);
+        Destroy(gameObject, 10.0f);  // Long delay to let damage system finish
         Main.logger.LogInfo("Exploded !!!");
     }
 
@@ -39,27 +39,21 @@ public class TorpedoExplosionBehaviour : MonoBehaviour
         Main.logger.LogInfo($"{typeof(TorpedoExplosionBehaviour).FullName}: Setting up detonation prefab for explosive torpedo...");
         if (detonationPrefab != null)
         {
-            Main.logger.LogInfo($"{typeof(TorpedoExplosionBehaviour).FullName}: vfxMeteor is already defined.");
+            Main.logger.LogInfo($"{typeof(TorpedoExplosionBehaviour).FullName}: detonationPrefab is already defined.");
             yield break;
         }
 
-        GameObject prefab;
+        // Try to get the Crashfish explosion prefab directly
+        Main.logger.LogInfo($"{typeof(TorpedoExplosionBehaviour).FullName}: Loading ExplosionPrefab...");
+        var explosionTask = PrefabDatabase.GetPrefabAsync("29619c37-13eb-4a21-b762-deac4cbe41fb"); // ExplosionPrefab
+        yield return explosionTask;
 
-#if BZ
-        prefab = VFXWeatherManager.main.meteorController.closeUpPrefab;
-
-        if(prefab.GetComponent<VFXMeteor>() == null)
+        if (explosionTask.TryGetPrefab(out detonationPrefab))
         {
-            Main.logger.LogError($"{typeof(TorpedoExplosionBehaviour).FullName}: No VFXMeteor found in the closeupPrefab.");
+            Main.logger.LogInfo($"{typeof(TorpedoExplosionBehaviour).FullName}: Using ExplosionPrefab: {detonationPrefab.name}");
             yield break;
         }
-#else
-        var task = PrefabDatabase.GetPrefabAsync("db6907f8-2c37-4d0b-8eac-1b1e3b59fa71");
-        yield return task;
-        task.TryGetPrefab(out prefab);
-#endif
-        yield return prefab;
-        detonationPrefab = prefab;
-        Main.logger.LogInfo($"{typeof(TorpedoExplosionBehaviour).FullName}: Detonation prefab set up.");
+
+        Main.logger.LogWarning($"{typeof(TorpedoExplosionBehaviour).FullName}: Failed to load ExplosionPrefab, falling back to meteor.");
     }
 }

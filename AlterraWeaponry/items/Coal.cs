@@ -1,4 +1,4 @@
-﻿using CuddleLibs.Interfaces;
+﻿using Nautilus.Assets;
 
 namespace VELD.AlterraWeaponry.Items;
 
@@ -16,7 +16,7 @@ internal class Coal
             Main.logger.LogError("Unable to load Coal Sprite from cache.");
 
         this.Info = PrefabInfo
-            .WithTechType(classId: ClassID, displayName: null, description: null, unlockAtStart: true, techTypeOwner: Assembly.GetExecutingAssembly())
+            .WithTechType(classId: ClassID, displayName: null, description: null, unlockAtStart: false, techTypeOwner: Assembly.GetExecutingAssembly())
             .WithIcon(icon)
             .WithSizeInInventory(new(1, 1));
 
@@ -41,7 +41,7 @@ internal class Coal
             ModifyPrefab = (go) =>
             {
                 var renderer = go.GetComponentInChildren<MeshRenderer>();
-                foreach(var mat in renderer.materials)
+                foreach (var mat in renderer.materials)
                 {
                     if (Main.AssetsCache.TryGetAsset("Coal", out Texture2D albedo))
                         mat.SetTexture(ShaderPropertyID._MainTex, albedo);
@@ -55,32 +55,19 @@ internal class Coal
 
                 var vfxFabricating = go.EnsureComponent<VFXFabricating>();
                 MaterialUtils.ApplySNShaders(go);
-            } 
+            }
         };
 
         customPrefab.SetGameObject(clone);
         customPrefab.SetUnlock(TechType.CreepvinePiece)
             .WithPdaGroupCategoryBefore(TechGroup.Resources, TechCategory.BasicMaterials);
-        customPrefab.SetEquipment(EquipmentType.None);
+        // Do not call SetEquipment for non-equippable items
         customPrefab.SetRecipe(recipe)
             .WithCraftingTime(4f)
             .WithFabricatorType(CraftTree.Type.Fabricator)
             .WithStepsToFabricatorTab("Resources", "BasicMaterials");
 
-        OutcropsUtils.EnsureOutcropDrop(
-            (TechType.LimestoneChunk, TechType, 0.408f),
-#if BZ
-            (TechType.BreakableGold, TechType, 0.159f),
-            (TechType.BreakableSilver, TechType, 0.118f)
-#elif SN1
-            (TechType.SandstoneChunk, TechType, 0.159f),
-            (TechType.ShaleChunk, TechType, 0.118f)
-#endif
-        );
-
         customPrefab.Register();
-
-        BaseBioReactor.charge.Add(TechType, 560f);
 
         Main.logger.LogDebug("Prefab loaded and registered for Coal.");
     }

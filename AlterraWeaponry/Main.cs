@@ -14,8 +14,9 @@ public class Main : BaseUnityPlugin
     public static ManualLogSource logger;
 
     // STORY GOALS
+#if BZ
     internal static StoryGoal AWPresentationGoal;
-    internal static ItemGoal AWFirstLethal;
+#endif
 
     public static ResourcesCacheManager AssetsCache { get; private set; }
 
@@ -26,11 +27,7 @@ public class Main : BaseUnityPlugin
         logger = Logger;
         try
         {
-#if BZ
-            AssetsCache = ResourcesCacheManager.LoadResources(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "bz.alterraweaponry.assets"));
-#else
             AssetsCache = ResourcesCacheManager.LoadResources(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "sn.alterraweaponry.assets"));
-#endif
         }
         catch (Exception ex)
         {
@@ -43,32 +40,20 @@ public class Main : BaseUnityPlugin
         logger.LogInfo($"{modName} {modVers} started patching.");
         harmony.PatchAll();
         logger.LogInfo($"{modName} {modVers} harmony patched.");
-        LanguagesHandler.GlobalPatch();
-        logger.LogInfo($"{modName} {modVers} languages lines patched.");
 
-// These features are reserved to Below Zero, due to the lore of the game.
-#if BZ
-        GlobalInitializer.PatchPDAEncyEntries();
-        logger.LogInfo($"{modName} {modVers} PDA encyclopedia entries registered.");
-        GlobalInitializer.PatchGoals();
-        logger.LogInfo($"{modName} {modVers} PDA goals initialized.");
-        //CoroutineHost.StartCoroutine(GlobalInitializer.PatchPDALogs());
-        GlobalInitializer.PatchPDALogs();
-        logger.LogInfo($"{modName} {modVers} Started registering PDA logs.");
-#endif
+#if SN1
+        BreakableResourcePatcher.Patch(harmony);
+        logger.LogInfo($"{modName} {modVers} breakable resource patched.");
 
-        ModDatabankHandler.RegisterMod(new ModDatabankHandler.ModData()
-        {
-            guid = modGUID,
-            version = modVers,
-            image = AssetsCache.GetAsset<Texture2D>("ModLogo"),
-            name = "Alterra Weaponry",
-#if BZ
-            desc = "Since the return of the Aurora survivor, Alterra secretely added a few weapons blueprints.\nThis information is kept confidential, by using the PWA (Personal Weaponry Assistance) you agree the Alterra's NDA (Non-Divulgation Accord)."
-#else
-            desc = "Ever wanted to bust some asses in Subnautica? You got the right mod!\n\nThis mod is made to run on Below Zero. Because of that, some features will not be available on Subnautica, for example PDA voicelines, encyclopedia entries, and everything related to lore."
-#endif
-        });
+        // ModDatabankHandler entry disabled - was causing duplicate PDA entries on each load
+        // ModDatabankHandler.RegisterMod(new ModDatabankHandler.ModData()
+        // {
+        //     guid = modGUID,
+        //     version = modVers,
+        //     image = AssetsCache.GetAsset<Texture2D>("ModLogo"),
+        //     name = "Alterra Weaponry",
+        //     desc = "Ever wanted to bust some asses in Subnautica? You got the right mod!\n\nThis mod adds weapons and defensive modules to Subnautica."
+        // });
 
         Coal coal = new();
         coal.Patch();
@@ -83,6 +68,16 @@ public class Main : BaseUnityPlugin
         prawnSelfDefenseModule.Patch();
 
         logger.LogInfo($"{modName} {modVers} items registered.");
-    }
 
+        // Patch localization before registering PDA entries
+        LanguagesHandler.GlobalPatch();
+
+        // Initialize PDA entries and goals
+        GlobalInitializer.PatchGoals();
+        GlobalInitializer.PatchPDALogs();
+        GlobalInitializer.PatchPDAEncyEntries();
+
+        logger.LogInfo($"{modName} {modVers} initialization complete.");
+#endif
+    }
 }

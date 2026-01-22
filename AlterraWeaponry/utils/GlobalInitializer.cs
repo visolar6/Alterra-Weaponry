@@ -1,11 +1,10 @@
-﻿#if BZ
-namespace VELD.AlterraWeaponry.Utils;
+﻿namespace VELD.AlterraWeaponry.Utils;
 
 internal class GlobalInitializer
 {
     internal static void PatchGoals()
     {
-
+#if BZ
         Main.AWPresentationGoal = new("PWAPresentation", Story.GoalType.PDA, 8f)
         { 
             playInCreative = true,
@@ -18,37 +17,14 @@ internal class GlobalInitializer
         {
             Main.logger.LogInfo("Played PWAPresentation goal.");
         });
-
-        Main.AWFirstLethal = Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal("AWFirstLethal", Story.GoalType.PDA, ExplosiveTorpedo.TechType, 3f);
-
-        Nautilus.Handlers.StoryGoalHandler.RegisterCustomEvent("AWFirstLethal", () =>
-        {
-            Main.logger.LogInfo("Revealing the WeaponsAuthorization PDA ency entry.");
-            try
-            {
-                PDAEncyclopedia.Reveal("Ency_WeaponsAuthorization", true);
-            }
-            catch(Exception ex)
-            {
-                Main.logger.LogError(ex.ToString());
-            }
-
-            try
-            {
-                PDAEncyclopedia.Reveal("WeaponsAuthoriazation", true);
-            }
-            catch (Exception ex)
-            {
-                Main.logger.LogError(ex.ToString());
-            }
-        });
+#endif
     }
 
     // This function MUST be an IEnumerator because the SpriteManager is not initialized soon enough for getting the PDA logs icons at time.
     internal static void PatchPDALogs()
     {
         //yield return new WaitUntil(() => SpriteManager.hasInitialized);
-
+#if BZ
         Main.logger.LogInfo($"{Main.modName} {Main.modVers} Registering PDA Logs...");
 
         // Presentation PDA log "Hello xenoworker 91802..."
@@ -108,10 +84,50 @@ internal class GlobalInitializer
         }
 
         Main.logger.LogInfo($"{Main.modName} {Main.modVers} Registered PDA logs!");
+#endif
     }
 
     internal static void PatchPDAEncyEntries()
     {
+        // Coal entry
+        Sprite coalIcon = null;
+        Main.AssetsCache.TryGetAsset("Coal", out coalIcon);
+        PDAHandler.AddEncyclopediaEntry(
+            "Coal",
+            "Tech/Weaponry",
+            Language.main.Get("Ency_Coal"),
+            Language.main.Get("EncyDesc_Coal"),
+            null,
+            coalIcon,
+            unlockSound: PDAHandler.UnlockBasic
+        );
+
+        // BlackPowder entry
+        Sprite blackPowderIcon = null;
+        Main.AssetsCache.TryGetAsset("BlackPowder", out blackPowderIcon);
+        PDAHandler.AddEncyclopediaEntry(
+            "BlackPowder",
+            "Tech/Weaponry",
+            Language.main.Get("Ency_BlackPowder"),
+            Language.main.Get("EncyDesc_BlackPowder"),
+            null,
+            blackPowderIcon,
+            unlockSound: PDAHandler.UnlockBasic
+        );
+
+        // ExplosiveTorpedo entry
+        Sprite explosiveTorpedoIcon = null;
+        Main.AssetsCache.TryGetAsset("ExplosiveTorpedo", out explosiveTorpedoIcon);
+        PDAHandler.AddEncyclopediaEntry(
+            "ExplosiveTorpedo",
+            "Tech/Weaponry",
+            Language.main.Get("Ency_ExplosiveTorpedo"),
+            Language.main.Get("EncyDesc_ExplosiveTorpedo"),
+            null,
+            explosiveTorpedoIcon,
+            unlockSound: PDAHandler.UnlockImportant
+        );
+
         // Prawn laser arm entry
         PDAHandler.AddEncyclopediaEntry(
             "PrawnLaserArm",
@@ -128,6 +144,12 @@ internal class GlobalInitializer
             null,
             unlockSound: PDAHandler.UnlockImportant
         );
+
+        // Register AWFirstLethal event handler for both games
+        /*Nautilus.Handlers.StoryGoalHandler.RegisterCustomEvent("AWFirstLethal", () =>
+        {
+            Main.logger.LogInfo("Triggering AWFirstLethal - unlocking WeaponsAuthorization encyclopedia entry.");
+            PDAEncyclopedia.Add("WeaponsAuthorization", true);
+        });*/
     }
 }
-#endif

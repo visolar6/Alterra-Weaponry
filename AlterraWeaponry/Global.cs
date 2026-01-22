@@ -52,10 +52,3 @@ global using VELD.AlterraWeaponry.Items;
 global using VELD.AlterraWeaponry.Patches;
 global using VELD.AlterraWeaponry.Utils;
 global using VELD.AlterraWeaponry.Behaviours;
-
-// MY LIBS
-global using CuddleLibs;
-global using CuddleLibs.Assets;
-global using CuddleLibs.Assets.Gadgets;
-global using CuddleLibs.Interfaces;
-global using CuddleLibs.Utility;

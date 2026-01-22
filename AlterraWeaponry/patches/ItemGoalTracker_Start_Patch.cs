@@ -1,47 +1,74 @@
-﻿/*namespace VELD.AlterraWeaponry.Patches;
+﻿namespace VELD.AlterraWeaponry.Patches;
 
-[HarmonyPatch(typeof(ItemGoalTracker))]
+[HarmonyPatch(typeof(Pickupable))]
 internal class ItemGoalTracker_Start_Patch
 {
-    [HarmonyPrefix]
-    [HarmonyPatch(nameof(ItemGoalTracker.Start))]
-    public static void Start(ItemGoalTracker __instance)
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(Pickupable.Pickup))]
+    public static void Pickup_Postfix(Pickupable __instance)
     {
-        List<TechType> techTypes = new()
-        {
-            ExplosiveTorpedo.TechType,
-            //PrawnLaserArm.TechType,
-        };
+        if (__instance == null)
+            return;
 
-        ItemGoal[] goals = __instance.goalData.goals;
-        foreach (TechType techType in techTypes)
+        TechType techType = __instance.GetTechType();
+
+        // Creepvine → Unlock Coal recipe and Coal encyclopedia entry
+        if (techType == TechType.CreepvineSeedCluster || techType == TechType.CreepvinePiece)
         {
-            ItemGoal goal = new ItemGoal()
+            if (!KnownTech.Contains(Coal.TechType))
             {
-                techType = techType,
-                goalType = Story.GoalType.PDA,
-                key = "AWFirstLethal",
-                playInCreative = true,
-                playInCinematics = false,
-            };
-
-            goals = goals.AddItem(goal).ToArray();
+                Main.logger.LogInfo($"Creepvine picked up! Unlocking Coal recipe.");
+                KnownTech.Add(Coal.TechType);
+            }
+            // Unlock Coal encyclopedia entry
+            if (!PDAEncyclopedia.ContainsEntry("Coal"))
+            {
+                Main.logger.LogInfo($"Creepvine picked up! Unlocking Coal encyclopedia entry.");
+                PDAEncyclopedia.Add("Coal", true);
+            }
         }
 
-        foreach (TechType techType in techTypes)
+        // Coal → Unlock BlackPowder recipe and BlackPowder encyclopedia entry
+        if (techType == Coal.TechType)
         {
-            ItemGoal goal = new ItemGoal()
+            if (!KnownTech.Contains(BlackPowder.TechType))
             {
-                techType = techType,
-                goalType = Story.GoalType.Encyclopedia,
-                key = $"Ency_{nameof(techType)}",
-                playInCreative = true,
-                playInCinematics = false,
-            };
+                Main.logger.LogInfo($"Coal picked up! Unlocking BlackPowder recipe.");
+                KnownTech.Add(BlackPowder.TechType);
+            }
+            // Unlock BlackPowder encyclopedia entry
+            if (!PDAEncyclopedia.ContainsEntry("BlackPowder"))
+            {
+                Main.logger.LogInfo($"Coal picked up! Unlocking BlackPowder encyclopedia entry.");
+                PDAEncyclopedia.Add("BlackPowder", true);
+            }
 
-            goals = goals.AddItem(goal).ToArray();
+            // Check if goal already completed
+            if (StoryGoalManager.main != null && StoryGoalManager.main.IsGoalComplete("AWFirstLethal"))
+            {
+                Main.logger.LogInfo("AWFirstLethal goal already completed.");
+                return;
+            }
+
+            // Trigger the goal manually
+            Main.logger.LogInfo("Triggering AWFirstLethal story goal!");
+            StoryGoal.Execute("AWFirstLethal", Story.GoalType.PDA);
         }
 
-        __instance.goalData.goals = goals;
+        // BlackPowder → Unlock ExplosiveTorpedo recipe and ExplosiveTorpedo encyclopedia entry
+        if (techType == BlackPowder.TechType)
+        {
+            if (!KnownTech.Contains(ExplosiveTorpedo.TechType))
+            {
+                Main.logger.LogInfo($"BlackPowder picked up! Unlocking ExplosiveTorpedo recipe.");
+                KnownTech.Add(ExplosiveTorpedo.TechType);
+            }
+            // Unlock ExplosiveTorpedo encyclopedia entry
+            if (!PDAEncyclopedia.ContainsEntry("ExplosiveTorpedo"))
+            {
+                Main.logger.LogInfo($"BlackPowder picked up! Unlocking ExplosiveTorpedo encyclopedia entry.");
+                PDAEncyclopedia.Add("ExplosiveTorpedo", true);
+            }
+        }
     }
-}*/
+}

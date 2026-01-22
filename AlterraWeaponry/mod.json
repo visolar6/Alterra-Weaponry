@@ -10,7 +10,7 @@
   "LoadBefore": [],
   "LoadAfter": [],
   "Enable": true,
-  "Game": "BelowZero",
+  "Game": "Subnautica",
   "AssemblyName": "AlterraWeaponry.dll",
   "NitroxCompat": true,
   "VersionChecker": {

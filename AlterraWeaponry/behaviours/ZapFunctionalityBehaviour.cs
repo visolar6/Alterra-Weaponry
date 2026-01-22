@@ -7,11 +7,11 @@ internal class ZapFunctionalityBehaviour : MonoBehaviour // Thanks to ECM and Pr
     public static GameObject ElectricalDefensePrefab => seamothElectricalDefensePrefab;
 
     public float Overcharge { get; private set; }
-    public float OverchargeScalar { get; private set; } 
+    public float OverchargeScalar { get; private set; }
 
     private void Awake()
     {
-        if(seamothElectricalDefensePrefab == null)
+        if (seamothElectricalDefensePrefab == null)
             CoroutineHost.StartCoroutine(UpdateDefensePrefab());
     }
 
@@ -63,7 +63,7 @@ internal class ZapFunctionalityBehaviour : MonoBehaviour // Thanks to ECM and Pr
         ElectricalDefense defenseComponent = gameObject.GetComponent<ElectricalDefense>();
         defenseComponent.charge = this.Overcharge;
         defenseComponent.chargeScalar = this.OverchargeScalar;
-        defenseComponent.damage *= Main.Options.dmgMultiplier;
+        defenseComponent.damage *= Main.Options.explosionDamageMultiplier;
         Main.logger.LogInfo("Should have zapped !");
     }
 }

@@ -30,7 +30,7 @@ internal class BlackPowder
             [
                 new(Coal.TechType, 1),
                 new(TechType.Sulphur, 1),
-                new(TechType.CoralShellPlate, 3)
+                new(TechType.CoralChunk, 3)
             ]
         };
 

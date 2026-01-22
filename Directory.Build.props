@@ -1,6 +1,10 @@
 <Project>
  <PropertyGroup>
-	<!-- Subnautica root path below -->
+	<!-- Subnautica root path below - CUSTOMIZE FOR YOUR SYSTEM -->
+	<!-- To use a different path: create Directory.Build.props.user with your local path -->
    <SubnauticaRootPath>D:\SteamLibrary\steamapps\common\Subnautica</SubnauticaRootPath>
  </PropertyGroup>
+ 
+ <!-- Load user-specific overrides if they exist -->
+ <Import Project="Directory.Build.props.user" Condition="Exists('Directory.Build.props.user')" />
 </Project>

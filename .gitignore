@@ -64,3 +64,6 @@ artifacts/
 
 # Additional files
 AlterraWeaponry/game-dirs.txt
+
+# Local developer configuration (machine-specific paths)
+Directory.Build.props.user

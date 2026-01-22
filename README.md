@@ -1,14 +1,18 @@
 # Alterra Weaponry
+
+> **⚠️ Subnautica Port Notice**: This is a community port of the original Subnautica: Below Zero mod to the first Subnautica game. **The vast majority of this mod's work was created by [VELD](https://github.com/VELD-Dev/)**. This port adapted and fixed compatibility issues for the original game.
+
 [![release](https://img.shields.io/github/v/release/VELD-Dev/Alterra-Weaponry?color=success&display_name=tag&logo=github&style=flat)](https://github.com/VELD-Dev/Alterra-Weaponry/releases "Last release of the mod")
 [![total downloads](https://img.shields.io/github/downloads/VELD-Dev/Alterra-Weaponry/total?color=success&logo=github)](https://github.com/VELD-Dev/Alterra-Weaponry/downloads "Total downloads, including pre-releases, of the mod")
 [![license](https://img.shields.io/github/license/VELD-Dev/Alterra-Weaponry)](https://github.com/VELD-Dev/Alterra-Weaponry/blob/main/LICENSE "License")
 [![line count](https://tokei.rs/b1/github/VELD-Dev/Alterra-Weaponry?category=lines&type=CSharp)](https://github.com/VELD-Dev/Alterra-Weaponry/ "Lines count")  
-Alterra Weaponry is a mod for **Subnautica: Below Zero** (Subnautica soon) that adds weapons, while remaining cannon with the game lore (Obraxis Prime Massacre).  
+
+Alterra Weaponry is a weapons and defensive tools mod for **Subnautica** (originally created for **Subnautica: Below Zero**) that adds combat-ready equipment while remaining lore-friendly (Obraxis Prime Massacre reference).  
 This mod and its lore has **no certification** from **UWE**, do not take the story of the mod as reality.  
 
 ## Languages available
-- **English** (translated by me)
-- **French** (translated by me)
+- **English** (translated by VELD)
+- **French** (translated by VELD)
 - **German** (translated by SirTNT)
 
 ## Weapons and offensive tools
@@ -28,6 +32,13 @@ Main weapons:
 - **Advanced Refractor Lu86K** (There's an encyclopedia entry explaining what it is)
 
 ## Credits
+
+### Original Mod Creator
+- **[VELD](https://github.com/VELD-Dev/)** - Original mod development for Subnautica: Below Zero
+
+### Port & Adaptation (Subnautica)
+- Community contribution - Porting to original Subnautica, fixing compatibility issues
+
 ### Softwares used:  
 - **Visual Studio 2022**: Programming  
 - **[Text Reader Pro (English/Ivy)](https://textreader.pro/)**: Voice of the PWA.  

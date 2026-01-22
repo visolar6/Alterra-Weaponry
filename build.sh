@@ -7,12 +7,14 @@ if [ $? -ne 0 ]; then
 fi
 
 # Copy DLL and assets to Subnautica BepInEx plugins folder
-SUBNAUTICA_PATH="D:/SteamLibrary/steamapps/common/Subnautica"
+# Set SUBNAUTICA_PATH environment variable or edit here for your system
+SUBNAUTICA_PATH="${SUBNAUTICA_PATH:-D:/SteamLibrary/steamapps/common/Subnautica}"
 PLUGIN_DIR="$SUBNAUTICA_PATH/BepInEx/plugins/AlterraWeaponry"
-DLL_PATH="AlterraWeaponry/bin/built/AlterraWeaponry/AlterraWeaponry.dll"
-ASSETS_PATH="AlterraWeaponry/bin/built/AlterraWeaponry/sn.alterraweaponry.assets"
-BANNER_ASSETS_PATH="AlterraWeaponry/bin/built/AlterraWeaponry/sn.alterraweaponry_banners.assets"
-LOCALIZATION_PATH="AlterraWeaponry/bin/built/AlterraWeaponry/Localizations.xml"
+DLL_PATH="AlterraWeaponry/bin/Release/net472/AlterraWeaponry.dll"
+ASSETS_PATH="AlterraWeaponry/sn.alterraweaponry.assets"
+BANNER_ASSETS_PATH="AlterraWeaponry/sn.alterraweaponry_banners.assets"
+LOCALIZATION_PATH="AlterraWeaponry/Localizations.xml"
+MOD_JSON_PATH="AlterraWeaponry/mod.json"
 
 if [ -f "$DLL_PATH" ]; then
     mkdir -p "$PLUGIN_DIR"
@@ -39,7 +41,17 @@ if [ -f "$DLL_PATH" ]; then
     else
         echo "✗ Localizations.xml not found at $LOCALIZATION_PATH"
     fi
+    
+    if [ -f "$MOD_JSON_PATH" ]; then
+        cp "$MOD_JSON_PATH" "$PLUGIN_DIR/"
+        echo "✓ mod.json copied to $PLUGIN_DIR"
+    else
+        echo "✗ mod.json not found at $MOD_JSON_PATH"
+    fi
 else
     echo "✗ DLL not found at $DLL_PATH"
+    echo "Make sure you have built the project in Release mode"
     exit 1
 fi
+
+echo "✓ Build and deployment complete!"

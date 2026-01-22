@@ -19,6 +19,7 @@ public class Main : BaseUnityPlugin
 #endif
 
     public static ResourcesCacheManager AssetsCache { get; private set; }
+    public static ResourcesCacheManager BannerAssetsCache { get; private set; }
 
     internal static Options Options { get; } = OptionsPanelHandler.RegisterModOptions<Options>();
 
@@ -28,6 +29,8 @@ public class Main : BaseUnityPlugin
         try
         {
             AssetsCache = ResourcesCacheManager.LoadResources(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "sn.alterraweaponry.assets"));
+            BannerAssetsCache = ResourcesCacheManager.LoadResources(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "sn.alterraweaponry_banners.assets"));
+            logger.LogInfo("Successfully loaded resources to cache.");
         }
         catch (Exception ex)
         {

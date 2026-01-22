@@ -131,6 +131,9 @@
     <Content Include="sn.alterraweaponry.assets">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="sn.alterraweaponry_banners.assets">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="mod.json" />
   </ItemGroup>
 

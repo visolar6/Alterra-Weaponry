@@ -91,39 +91,45 @@ internal class GlobalInitializer
     {
         // Coal entry
         Sprite coalIcon = null;
+        Texture2D coalBanner = null;
         Main.AssetsCache.TryGetAsset("Coal", out coalIcon);
+        Main.BannerAssetsCache.TryGetAsset("Coal_banner", out coalBanner);
         PDAHandler.AddEncyclopediaEntry(
             "Coal",
             "Tech/Weaponry",
             Language.main.Get("Ency_Coal"),
             Language.main.Get("EncyDesc_Coal"),
-            null,
+            coalBanner,
             coalIcon,
             unlockSound: PDAHandler.UnlockBasic
         );
 
         // BlackPowder entry
         Sprite blackPowderIcon = null;
+        Texture2D blackPowderBanner = null;
         Main.AssetsCache.TryGetAsset("BlackPowder", out blackPowderIcon);
+        Main.BannerAssetsCache.TryGetAsset("BlackPowder_banner", out blackPowderBanner);
         PDAHandler.AddEncyclopediaEntry(
             "BlackPowder",
             "Tech/Weaponry",
             Language.main.Get("Ency_BlackPowder"),
             Language.main.Get("EncyDesc_BlackPowder"),
-            null,
+            blackPowderBanner,
             blackPowderIcon,
             unlockSound: PDAHandler.UnlockBasic
         );
 
         // ExplosiveTorpedo entry
         Sprite explosiveTorpedoIcon = null;
+        Texture2D explosiveTorpedoBanner = null;
         Main.AssetsCache.TryGetAsset("ExplosiveTorpedo", out explosiveTorpedoIcon);
+        Main.BannerAssetsCache.TryGetAsset("ExplosiveTorpedo_banner", out explosiveTorpedoBanner);
         PDAHandler.AddEncyclopediaEntry(
             "ExplosiveTorpedo",
             "Tech/Weaponry",
             Language.main.Get("Ency_ExplosiveTorpedo"),
             Language.main.Get("EncyDesc_ExplosiveTorpedo"),
-            null,
+            explosiveTorpedoBanner,
             explosiveTorpedoIcon,
             unlockSound: PDAHandler.UnlockImportant
         );

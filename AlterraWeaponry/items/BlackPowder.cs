@@ -42,7 +42,7 @@ internal class BlackPowder
         customPrefab.SetRecipe(recipe)
             .WithCraftingTime(2.5f)
             .WithFabricatorType(CraftTree.Type.Fabricator)
-            .WithStepsToFabricatorTab("Resources", "BasicMaterials");
+            .WithStepsToFabricatorTab("Resources", "AdvancedMaterials");
 
         customPrefab.Register();
 

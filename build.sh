@@ -11,6 +11,7 @@ SUBNAUTICA_PATH="D:/SteamLibrary/steamapps/common/Subnautica"
 PLUGIN_DIR="$SUBNAUTICA_PATH/BepInEx/plugins/AlterraWeaponry"
 DLL_PATH="AlterraWeaponry/bin/built/AlterraWeaponry/AlterraWeaponry.dll"
 ASSETS_PATH="AlterraWeaponry/bin/built/AlterraWeaponry/sn.alterraweaponry.assets"
+BANNER_ASSETS_PATH="AlterraWeaponry/bin/built/AlterraWeaponry/sn.alterraweaponry_banners.assets"
 LOCALIZATION_PATH="AlterraWeaponry/bin/built/AlterraWeaponry/Localizations.xml"
 
 if [ -f "$DLL_PATH" ]; then
@@ -23,6 +24,13 @@ if [ -f "$DLL_PATH" ]; then
         echo "✓ Assets copied to $PLUGIN_DIR"
     else
         echo "✗ Assets not found at $ASSETS_PATH"
+    fi
+
+    if [ -f "$BANNER_ASSETS_PATH" ]; then
+        cp "$BANNER_ASSETS_PATH" "$PLUGIN_DIR/"
+        echo "✓ Banner assets copied to $PLUGIN_DIR"
+    else
+        echo "✗ Banner assets not found at $BANNER_ASSETS_PATH"
     fi
     
     if [ -f "$LOCALIZATION_PATH" ]; then

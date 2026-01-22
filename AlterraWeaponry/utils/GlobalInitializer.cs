@@ -141,13 +141,13 @@ internal class GlobalInitializer
         //     unlockSound: PDAHandler.UnlockImportant
         // );
 
-        PDAHandler.AddEncyclopediaEntry(
-            "WeaponsAuthorization",
-            "Tech/Weaponry",
-            null,
-            null,
-            unlockSound: PDAHandler.UnlockImportant
-        );
+        // PDAHandler.AddEncyclopediaEntry(
+        //     "WeaponsAuthorization",
+        //     "Tech/Weaponry",
+        //     null,
+        //     null,
+        //     unlockSound: PDAHandler.UnlockImportant
+        // );
 
         // Register AWFirstLethal event handler for both games
         /*Nautilus.Handlers.StoryGoalHandler.RegisterCustomEvent("AWFirstLethal", () =>

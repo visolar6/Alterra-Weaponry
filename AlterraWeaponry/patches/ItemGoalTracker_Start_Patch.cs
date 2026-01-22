@@ -42,17 +42,6 @@ internal class ItemGoalTracker_Start_Patch
                 Main.logger.LogInfo($"Coal picked up! Unlocking BlackPowder encyclopedia entry.");
                 PDAEncyclopedia.Add("BlackPowder", true);
             }
-
-            // Check if goal already completed
-            if (StoryGoalManager.main != null && StoryGoalManager.main.IsGoalComplete("AWFirstLethal"))
-            {
-                Main.logger.LogInfo("AWFirstLethal goal already completed.");
-                return;
-            }
-
-            // Trigger the goal manually
-            Main.logger.LogInfo("Triggering AWFirstLethal story goal!");
-            StoryGoal.Execute("AWFirstLethal", Story.GoalType.PDA);
         }
 
         // BlackPowder → Unlock ExplosiveTorpedo recipe and ExplosiveTorpedo encyclopedia entry
@@ -69,6 +58,19 @@ internal class ItemGoalTracker_Start_Patch
                 Main.logger.LogInfo($"BlackPowder picked up! Unlocking ExplosiveTorpedo encyclopedia entry.");
                 PDAEncyclopedia.Add("ExplosiveTorpedo", true);
             }
+
+            // Check if goal already completed
+            if (StoryGoalManager.main != null && StoryGoalManager.main.IsGoalComplete("AWFirstLethal"))
+            {
+                Main.logger.LogInfo("AWFirstLethal goal already completed.");
+            }
+            else // Trigger the goal manually
+            {
+                Main.logger.LogInfo("Triggering AWFirstLethal story goal!");
+                StoryGoal.Execute("AWFirstLethal", Story.GoalType.PDA);
+            }
+
+
         }
     }
 }

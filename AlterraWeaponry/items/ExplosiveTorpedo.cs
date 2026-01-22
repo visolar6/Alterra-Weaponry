@@ -29,8 +29,8 @@ internal class ExplosiveTorpedo
             craftAmount = 2,
             Ingredients =
             [
-                new(BlackPowder.TechType, 2),
-                new(TechType.Titanium, 1)
+                new(TechType.Titanium, 1),
+                new(BlackPowder.TechType, 1)
             ]
         };
 
@@ -70,8 +70,8 @@ internal class ExplosiveTorpedo
 
         customPrefab.SetRecipe(recipe)
             .WithCraftingTime(4f)
-            .WithFabricatorType(CraftTree.Type.Fabricator)
-            .WithStepsToFabricatorTab("Resources", "BasicMaterials");
+            .WithFabricatorType(CraftTree.Type.SeamothUpgrades)
+            .WithStepsToFabricatorTab("Torpedoes");
 
         customPrefab.Register();
     }

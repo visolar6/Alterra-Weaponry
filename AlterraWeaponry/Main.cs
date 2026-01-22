@@ -67,6 +67,12 @@ public class Main : BaseUnityPlugin
         PrawnSelfDefenseModule prawnSelfDefenseModule = new();
         prawnSelfDefenseModule.Patch();
 
+        // PrawnLaserArm prawnLaserArm = new();
+        // prawnLaserArm.Patch();
+
+        // PrawnLaserArmFragment prawnLaserArmFragment = new();
+        // prawnLaserArmFragment.Patch();
+
         logger.LogInfo($"{modName} {modVers} items registered.");
 
         // Patch localization before registering PDA entries

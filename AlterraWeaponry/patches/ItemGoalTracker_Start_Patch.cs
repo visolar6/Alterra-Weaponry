@@ -70,8 +70,5 @@ internal class ItemGoalTracker_Start_Patch
                 PDAEncyclopedia.Add("ExplosiveTorpedo", true);
             }
         }
-
-        // ExplosiveTorpedo → Unlock PrawnLaserArm (requires 3 fragment scans which happens via scanning, not pickup)
-        // The 3-fragment scan requirement will be validated elsewhere
     }
 }

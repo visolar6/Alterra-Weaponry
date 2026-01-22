@@ -129,13 +129,17 @@ internal class GlobalInitializer
         );
 
         // Prawn laser arm entry
-        PDAHandler.AddEncyclopediaEntry(
-            "PrawnLaserArm",
-            "Tech/Weaponry",
-            null,
-            null,
-            unlockSound: PDAHandler.UnlockBasic
-        );
+        // Sprite prawnLaserArmIcon = null;
+        // Main.AssetsCache.TryGetAsset("PrawnLaserArm", out prawnLaserArmIcon);
+        // PDAHandler.AddEncyclopediaEntry(
+        //     "PrawnLaserArm",
+        //     "Tech/Weaponry",
+        //     Language.main.Get("Ency_PrawnLaserArm"),
+        //     Language.main.Get("EncyDesc_PrawnLaserArm"),
+        //     null,
+        //     prawnLaserArmIcon,
+        //     unlockSound: PDAHandler.UnlockImportant
+        // );
 
         PDAHandler.AddEncyclopediaEntry(
             "WeaponsAuthorization",

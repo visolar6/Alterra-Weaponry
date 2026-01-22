@@ -94,7 +94,7 @@ public class SeamothTorpedo_ExplosiveTorpedo_Patch
             if (crash != null && crash.detonateParticlePrefab != null)
             {
                 // Instantiate the explosion particle and scale it
-                float scale = Main.Options.explosionRadius / 5f; // 10m radius = 2x scale
+                float scale = Main.Options.explosionRadius / 10f; // 10m radius = 1.00x scale
                 var explosion = UnityEngine.Object.Instantiate(crash.detonateParticlePrefab, position, Quaternion.identity);
                 explosion.transform.localScale = Vector3.one * scale;
 

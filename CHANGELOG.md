@@ -2,6 +2,11 @@
 
 > **Important Note**: This is a community port of the original Subnautica: Below Zero mod created by [VELD](https://github.com/VELD-Dev/). The vast majority of this mod's functionality and design was created by VELD. This changelog documents the changes made for the Subnautica port.
 
+## [1.0.6] - Subnautica Port - 2026-01-23
+
+### Fixed
+- Fixed Prawn Suit Self Defense Module not appearing in vehicle upgrade console fabricator
+
 ## [1.0.5] - Subnautica Port - 2026-01-22
 
 ### Added

@@ -117,7 +117,7 @@
     <Reference Include="UnityEngine.VFXModule">
       <HintPath>$(SubnauticaRootPath)\Subnautica_Data\Managed\UnityEngine.VFXModule.dll</HintPath>
     </Reference>
-    <Reference Condition="'$(Configuration)'=='SN1' or '$(Configuration)'=='Release'" Include="Nautilus, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Nautilus, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(SubnauticaRootPath)\BepInEx\plugins\Nautilus\Nautilus.dll</HintPath>
     </Reference>

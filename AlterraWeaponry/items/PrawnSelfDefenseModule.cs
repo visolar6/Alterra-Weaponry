@@ -1,4 +1,6 @@
-﻿namespace VELD.AlterraWeaponry.Items;
+﻿using Nautilus.Assets;
+
+namespace VELD.AlterraWeaponry.Items;
 
 public class PrawnSelfDefenseModule
 {
@@ -10,7 +12,6 @@ public class PrawnSelfDefenseModule
     public static TechType TechType { get; private set; } = 0;
 
 
-    public static GameObject prefab;
     public PrefabInfo Info { get; private set; }
 
     public PrawnSelfDefenseModule()
@@ -41,9 +42,9 @@ public class PrawnSelfDefenseModule
             ]
         };
 
-        CustomPrefab customPrefab = new(this.Info);
+        CustomPrefab customPrefab = new(Info);
 
-        CloneTemplate clone = new(this.Info,
+        CloneTemplate clone = new(Info,
 #if BZ
             TechType.SeaTruckUpgradePerimeterDefense
 #elif SN1
@@ -56,7 +57,9 @@ public class PrawnSelfDefenseModule
         var scanningGadget = customPrefab.SetUnlock(TechType.Polyaniline);
         scanningGadget.WithPdaGroupCategoryAfter(TechGroup.VehicleUpgrades, TechCategory.VehicleUpgrades, TechType.ExosuitThermalReactorModule);
         scanningGadget.WithCompoundTechsForUnlock([TechType.Polyaniline, TechType.Gold]);
-#if BZ  // Sets this only on BZ if it can find it.
+
+#if BZ
+        // Sets this only on BZ if it can find it.
         if (!Main.AssetsCache.TryGetAsset("UpgradePopup", out Sprite popupSprite))
         {
             Main.logger.LogError("Unable to load UpgradePopup sprite from cache.");
@@ -102,10 +105,11 @@ public class PrawnSelfDefenseModule
                 }
                 Main.logger.LogInfo("Zapped !");
             });
+
         customPrefab.SetRecipe(recipe)
             .WithCraftingTime(2.5f)
-            .WithFabricatorType(CraftTree.Type.Fabricator)
-            .WithStepsToFabricatorTab("Upgrades", "ExosuitUpgrades");
+            .WithFabricatorType(CraftTree.Type.SeamothUpgrades)
+            .WithStepsToFabricatorTab("ExosuitModules");
 
         customPrefab.Register();
     }

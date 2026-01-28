@@ -2,6 +2,11 @@
 
 > **Important Note**: This is a community port of the original Subnautica: Below Zero mod created by [VELD](https://github.com/VELD-Dev/). The vast majority of this mod's functionality and design was created by VELD. This changelog documents the changes made for the Subnautica port.
 
+## [1.0.7] - Subnautica Port - 2026-01-28
+
+### Fixed
+- Can now fire explosive torpedoes from a Seamoth torpedo system
+
 ## [1.0.6] - Subnautica Port - 2026-01-23
 
 ### Fixed

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace VELD.AlterraWeaponry.Behaviours;
+namespace VELD.AlterraWeaponry.Mono;
 
 /// <summary>
 /// Persists through cloning to mark a torpedo as explosive

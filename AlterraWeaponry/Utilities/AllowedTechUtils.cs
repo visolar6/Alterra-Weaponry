@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Reflection;
 
-namespace VELD.AlterraWeaponry.Utils
+namespace VELD.AlterraWeaponry.Utilities
 {
     public static class AllowedTechUtils
     {

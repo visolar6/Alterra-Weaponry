@@ -1,4 +1,4 @@
-﻿namespace VELD.AlterraWeaponry.Utils;
+﻿namespace VELD.AlterraWeaponry.Utilities;
 
 [Menu("Alterra Weaponry")]
 public class Options : Nautilus.Json.ConfigFile

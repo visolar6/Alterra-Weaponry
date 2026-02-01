@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace VELD.AlterraWeaponry.Utils;
+namespace VELD.AlterraWeaponry.Utilities;
 
 public static class CustomExosuitArmUtils
 {

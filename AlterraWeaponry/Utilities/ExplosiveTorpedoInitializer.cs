@@ -1,4 +1,4 @@
-﻿namespace VELD.AlterraWeaponry.Utils;
+﻿namespace VELD.AlterraWeaponry.Utilities;
 
 internal class ExplosiveTorpedoInitializer // Thanks to Grimm The Second !
 {
@@ -29,7 +29,7 @@ internal class ExplosiveTorpedoInitializer // Thanks to Grimm The Second !
 
                     // Add marker component to the prefab so instances inherit it
                     Main.logger.LogInfo("[ExplosiveTorpedoInitializer] Adding ExplosiveTorpedoMarker to prefab");
-                    prefab.AddComponent<VELD.AlterraWeaponry.Behaviours.ExplosiveTorpedoMarker>();
+                    prefab.AddComponent<VELD.AlterraWeaponry.Mono.ExplosiveTorpedoMarker>();
 
                     torpedoType = new()
                     {

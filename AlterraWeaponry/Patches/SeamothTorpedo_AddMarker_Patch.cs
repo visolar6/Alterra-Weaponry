@@ -13,14 +13,14 @@ public class SeamothTorpedo_AddMarker_Patch
     [HarmonyPatch(typeof(global::SeamothTorpedo), "Awake")]
     private static void PostfixAwake(global::SeamothTorpedo __instance)
     {
-        var existingMarker = __instance.GetComponent<VELD.AlterraWeaponry.Behaviours.ExplosiveTorpedoMarker>();
+        var existingMarker = __instance.GetComponent<VELD.AlterraWeaponry.Mono.ExplosiveTorpedoMarker>();
         if (existingMarker != null)
             return;
 
         if (__instance.name.Contains("ExplosiveTorpedo"))
         {
             Main.logger.LogInfo($"[AddMarker Patch] Adding marker to {__instance.name}");
-            __instance.gameObject.AddComponent<VELD.AlterraWeaponry.Behaviours.ExplosiveTorpedoMarker>();
+            __instance.gameObject.AddComponent<VELD.AlterraWeaponry.Mono.ExplosiveTorpedoMarker>();
         }
     }
 }

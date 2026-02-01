@@ -1,4 +1,4 @@
-﻿namespace VELD.AlterraWeaponry.Utils
+﻿namespace VELD.AlterraWeaponry.Utilities
 {
     namespace LocalizationHandler
     {
@@ -73,14 +73,14 @@
 
             FileStream fs = new(Path.Combine(ModPath, filename), FileMode.Open, FileAccess.Read);
             LocalizationHandler.LocalizationPackages lps;
-            
+
             lps = (LocalizationHandler.LocalizationPackages)serializer.Deserialize(fs);
 
             foreach (LocalizationHandler.LocalizationPackage locpack in lps.Localizations)
             {
                 Main.logger.LogInfo(locpack.Lang);
 
-                foreach(LocalizationHandler.Text text in locpack.Texts)
+                foreach (LocalizationHandler.Text text in locpack.Texts)
                 {
                     if (string.IsNullOrEmpty(text.value))
                         continue;

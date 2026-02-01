@@ -1,4 +1,4 @@
-﻿namespace VELD.AlterraWeaponry.Utils;
+﻿namespace VELD.AlterraWeaponry.Utilities;
 
 public class ResourcesCacheManager
 {
@@ -56,10 +56,10 @@ public class ResourcesCacheManager
         RawResources = bundle.LoadAllAssets();
         var rm = new ResourcesCacheManager();
 
-        foreach(UnityEngine.Object asset in RawResources)
+        foreach (UnityEngine.Object asset in RawResources)
         {
             var assetName = asset.name.Split('.').Last();
-            if(!rm.CachedResources.ContainsKey(asset.GetType()))
+            if (!rm.CachedResources.ContainsKey(asset.GetType()))
             {
                 rm.CachedResources.Add(asset.GetType(), new() { { assetName, asset } });
                 Main.logger.LogDebug($"Cached {assetName} ({asset.name}) in dictionary of type {asset.GetType().Name}.");
@@ -90,7 +90,7 @@ public class ResourcesCacheManager
     public T GetAsset<T>(string name) where T : UnityEngine.Object
     {
         Main.logger.LogDebug($"Getting the asset {typeof(T).Name}.{name}...");
-        
+
         if (!CachedResources.TryGetValue(typeof(T), out var AssetsDict))
             throw new ArgumentException($"There is no dictionary for type '{typeof(T).Name}' does not exist in cached resources.");
 
@@ -115,7 +115,7 @@ public class ResourcesCacheManager
     public bool TryGetAssetLegacy<T>(string name, out T result) where T : UnityEngine.Object
     {
         bool res;
-        switch(true)
+        switch (true)
         {
             case true when typeof(T) == typeof(AudioClip):
                 res = CachedAudioClips.TryGetValue(name, out var audio);
@@ -143,7 +143,7 @@ public class ResourcesCacheManager
                 return res;
             default:
                 throw new ArgumentException("Type of T is not a valid UnityEngine.Object, or is not supported.");
-        } 
+        }
     }
 
     /// <summary>
@@ -163,7 +163,7 @@ public class ResourcesCacheManager
         if (!AssetsDict.TryGetValue(name, out var asset))
             return false;
 
-        if(asset is not T obj)
+        if (asset is not T obj)
             return false;
 
         result = asset as T;

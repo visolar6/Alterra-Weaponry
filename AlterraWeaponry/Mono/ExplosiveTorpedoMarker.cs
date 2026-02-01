@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace VELD.AlterraWeaponry.Behaviours;
+namespace VELD.AlterraWeaponry.Mono;
 
 /// <summary>
 /// Simple marker component to identify ExplosiveTorpedo projectiles

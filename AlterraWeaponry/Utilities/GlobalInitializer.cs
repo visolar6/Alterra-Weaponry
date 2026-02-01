@@ -1,4 +1,4 @@
-﻿namespace VELD.AlterraWeaponry.Utils;
+﻿namespace VELD.AlterraWeaponry.Utilities;
 
 internal class GlobalInitializer
 {

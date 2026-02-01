@@ -50,5 +50,5 @@ global using FMOD;
 // LOCAL
 global using VELD.AlterraWeaponry.Items;
 global using VELD.AlterraWeaponry.Patches;
-global using VELD.AlterraWeaponry.Utils;
-global using VELD.AlterraWeaponry.Behaviours;
+global using VELD.AlterraWeaponry.Utilities;
+global using VELD.AlterraWeaponry.Mono;

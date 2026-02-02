@@ -1,6 +1,6 @@
 # Alterra Weaponry
 
-> **⚠️ Subnautica Port Notice**: This is a community port of the original Subnautica: Below Zero mod to the first Subnautica game. **The vast majority of this mod's work was created by [VELD](https://github.com/VELD-Dev/)**. This port adapted and fixed compatibility issues for the original game.
+> **⚠️ Subnautica Port Notice**: This is a community port of the original Subnautica: Below Zero mod to the first Subnautica game. **The vast majority of this mod's work prior to version 1.0.5 was created by [VELD-DEV](https://github.com/VELD-Dev/)**. This port adapted and fixed compatibility issues for the original game in this mod's 1.0.5 release, and everything developed afterwards is by [visolar6](https://github.com/visolar6).
 
 [![release](https://img.shields.io/github/v/release/VELD-Dev/Alterra-Weaponry?color=success&display_name=tag&logo=github&style=flat)](https://github.com/VELD-Dev/Alterra-Weaponry/releases "Last release of the mod")
 [![total downloads](https://img.shields.io/github/downloads/VELD-Dev/Alterra-Weaponry/total?color=success&logo=github)](https://github.com/VELD-Dev/Alterra-Weaponry/downloads "Total downloads, including pre-releases, of the mod")
@@ -18,8 +18,9 @@ This mod and its lore has **no certification** from **UWE**, do not take the sto
 ## Weapons and offensive tools
 Main weapons:
 - **Explosive torpedo**: Can cause significative damages to entities.
-- **Laser Extractor**: The Laser Extractor is a tool with an usage similar to the Stasis Rifle one. It can be used to drill without a PRAWN suit, and can also be used as a weapon.
-- **Stasis Rifle**: The Stasis Rifle is reimplemented.
+- **Naval mine**: Can be armed and will detonate upon contact with medium to large creatures... including yourself.
+<!--- **Laser Extractor**: The Laser Extractor is a tool with an usage similar to the Stasis Rifle one. It can be used to drill without a PRAWN suit, and can also be used as a weapon.-->
+<!--- **Stasis Rifle**: The Stasis Rifle is reimplemented.-->
 - **Prawn Laser Arm**: The PRAWN Laser Arm is an extraction tool. It's like the Laser Extractor but more powerful.
 
 ## Vehicle modules
@@ -29,12 +30,12 @@ Main weapons:
 ## Resources
 - **Coal**
 - **Black Powder** (or commonly "Canonpowder" or "Gunpowder")
-- **Advanced Refractor Lu86K** (There's an encyclopedia entry explaining what it is)
+<!--- **Advanced Refractor Lu86K** (There's an encyclopedia entry explaining what it is)-->
 
 ## Credits
 
 ### Original Mod Creator
-- **[VELD](https://github.com/VELD-Dev/)** - Original mod development for Subnautica: Below Zero
+- **[VELD-DEV](https://github.com/VELD-Dev/)** - Original mod development for Subnautica: Below Zero
 
 ### Port & Adaptation (Subnautica)
 - Community contribution - Porting to original Subnautica, fixing compatibility issues
@@ -46,8 +47,7 @@ Main weapons:
 - **Unity 2019.4.36f1**: Bundling the assets
 
 ### Dependencies
-- [**Nautilus v1.0.0-pre.23+**](https://github.com/SubnauticaModding/Nautilus/releases)
-- [**CuddleLibs v1.0.3+**](https://github.com/VELD-Dev/CuddleLibs)
+- [**Nautilus**](https://github.com/SubnauticaModding/Nautilus/releases)
 - [**Tobey's BepInEx Pack**](https://github.com/toebeann/BepInEx.Subnautica/releases)
 
 This C# project is using **.NET 4.7.2** and **C# 12.0**.

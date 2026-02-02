@@ -1,6 +1,12 @@
 # Alterra Weaponry - Changelog
 
-> **Important Note**: This is a community port of the original Subnautica: Below Zero mod created by [VELD](https://github.com/VELD-Dev/). The vast majority of this mod's functionality and design was created by VELD. This changelog documents the changes made for the Subnautica port.
+> **Important Note**: This is a community port of the original Subnautica: Below Zero mod created by [VELD](https://github.com/VELD-Dev/). All of this mod's functionality and design up to version 1.0.5 was created by [VELD-DEV](https://github.com/VELD-DEV). This changelog documents the changes made for the Subnautica port.
+
+## [1.1.0] - Subnautica Port - 2026-02-01
+
+### Added
+- Can craft and use naval mines
+- Localization updates
 
 ## [1.0.7] - Subnautica Port - 2026-01-28
 

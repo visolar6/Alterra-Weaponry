@@ -1,18 +1,79 @@
-namespace VELD.AlterraWeaponry.Mono
+namespace VELD.AlterraWeaponry.Mono.DepthCharge
 {
     public class DepthChargeVFX : MonoBehaviour
     {
-        private const float explosionRadius = 8f;
+        private DepthChargeBehavior? _behavior;
+
+        public float ExplosionRadius
+        {
+            get
+            {
+                if (_behavior == null)
+                    _behavior = gameObject.GetComponent<DepthChargeBehavior>();
+                return _behavior.ExplosionRadius;
+            }
+        }
 
         public void PlayExplosionEffect()
         {
-            StartCoroutine(SpawnCustomExplosion(transform.position));
+            StartCoroutine(SpawnMultiPulseExplosion(transform.position));
+        }
+
+        /// <summary>
+        /// Simulates an underwater explosion: initial flash, then several smaller pressure pulses.
+        /// </summary>
+        private IEnumerator SpawnMultiPulseExplosion(Vector3 position)
+        {
+            // Initial main blast (flash, light, big VFX)
+            yield return StartCoroutine(SpawnCustomExplosion(position));
+
+            // Parameters for pulses
+            int pulseCount = 3;
+            float pulseInterval = 0.35f;
+            float pulseScale = 0.5f; // Start at half size
+            float scaleDecay = 0.5f; // Each pulse is half the previous
+
+            for (int i = 0; i < pulseCount; i++)
+            {
+                yield return new WaitForSeconds(pulseInterval);
+                StartCoroutine(SpawnPulseExplosion(position, pulseScale));
+                pulseScale *= scaleDecay;
+            }
+        }
+
+        /// <summary>
+        /// Spawns a smaller crashfish explosion for a pressure pulse (no light).
+        /// </summary>
+        private IEnumerator SpawnPulseExplosion(Vector3 position, float scale)
+        {
+            // Use Crashfish explosion particles
+            var crashfishTask = CraftData.GetPrefabForTechTypeAsync(TechType.Crash);
+            yield return crashfishTask;
+
+            var crashfishPrefab = crashfishTask.GetResult();
+            if (crashfishPrefab != null)
+            {
+                var crash = crashfishPrefab.GetComponent<Crash>();
+                if (crash != null && crash.detonateParticlePrefab != null)
+                {
+                    var explosion = Instantiate(crash.detonateParticlePrefab, position, Quaternion.identity);
+                    explosion.transform.localScale = Vector3.one * scale;
+
+                    var particleSystems = explosion.GetComponentsInChildren<ParticleSystem>();
+                    foreach (var ps in particleSystems)
+                    {
+                        var main = ps.main;
+                        main.scalingMode = ParticleSystemScalingMode.Hierarchy;
+                        main.startSizeMultiplier *= scale * 1.5f;
+                        main.startSpeedMultiplier *= scale;
+                        ps.Play();
+                    }
+                }
+            }
         }
 
         private IEnumerator SpawnCustomExplosion(Vector3 position)
         {
-            Main.logger.LogInfo("[DepthCharge] Creating custom explosion VFX...");
-
             // 1. Create the main explosion flash/burst
             var flashObj = new GameObject("DepthChargeExplosionFlash");
             flashObj.transform.position = position;
@@ -22,7 +83,7 @@ namespace VELD.AlterraWeaponry.Mono
             light.type = LightType.Point;
             light.color = new Color(1f, 0.7f, 0.3f); // Orange-yellow
             light.intensity = 10f;
-            light.range = explosionRadius * 3f;
+            light.range = ExplosionRadius * 3f;
             light.shadows = LightShadows.None;
 
             // Animate the light
@@ -39,7 +100,7 @@ namespace VELD.AlterraWeaponry.Mono
                 if (crash != null && crash.detonateParticlePrefab != null)
                 {
                     // Instantiate the explosion particle and scale it
-                    float scale = explosionRadius / 4f; // Slightly smaller scale
+                    float scale = ExplosionRadius / 4f;
                     var explosion = Instantiate(crash.detonateParticlePrefab, position, Quaternion.identity);
                     explosion.transform.localScale = Vector3.one * scale;
 
@@ -52,15 +113,11 @@ namespace VELD.AlterraWeaponry.Mono
                         main.startSpeedMultiplier *= scale;
                         ps.Play();
                     }
-
-                    Main.logger.LogInfo($"[DepthCharge] Crashfish explosion spawned with scale {scale:F2}x");
                 }
             }
 
             // 3. Create visible shockwave effect
             StartCoroutine(CreateShockwave(position));
-
-            Main.logger.LogInfo("[DepthCharge] Custom explosion VFX complete");
         }
 
         private IEnumerator AnimateExplosionLight(Light light, GameObject lightObj)
@@ -84,7 +141,7 @@ namespace VELD.AlterraWeaponry.Mono
                     light.intensity = 15f * Mathf.Exp(-(t - 0.1f) * 5f);
                 }
 
-                light.range = explosionRadius * 3f * (1f - t * 0.5f);
+                light.range = ExplosionRadius * 3f * (1f - t * 0.5f);
 
                 yield return null;
             }
@@ -96,7 +153,7 @@ namespace VELD.AlterraWeaponry.Mono
         {
             // Create expanding bubble shockwave with more visible bubbles
             int bubbleCount = 50;
-            float speed = explosionRadius * 2f;
+            float speed = ExplosionRadius * 2f;
 
             for (int i = 0; i < bubbleCount; i++)
             {

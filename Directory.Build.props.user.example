@@ -12,6 +12,6 @@
 -->
 <Project>
   <PropertyGroup>
-    <SubnauticaRootPath>C:\Program Files (x86)\Steam\steamapps\common\Subnautica</SubnauticaRootPath>
+    <GameDir>C:\Program Files (x86)\Steam\steamapps\common\Subnautica</GameDir>
   </PropertyGroup>
 </Project>

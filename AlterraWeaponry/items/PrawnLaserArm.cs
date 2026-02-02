@@ -9,14 +9,13 @@ namespace VELD.AlterraWeaponry.Items;
 
 public class PrawnLaserArm
 {
+    public static string ClassID = "PrawnLaserArm";
+    public static TechType TechType { get; private set; } = 0;
+
     public const float maxCharge = 20f;
     public const float energyCost = 3f;
     public const float cooldown = 0f; // No cooldown - continuous firing
 
-    public static string ClassID = "PrawnLaserArm";
-    public static TechType TechType { get; private set; } = 0;
-
-    public static GameObject prefab;
     public PrefabInfo Info { get; private set; }
 
     public PrawnLaserArm()
@@ -29,7 +28,7 @@ public class PrawnLaserArm
             .WithSizeInInventory(new(1, 1))
             .WithIcon(icon);
 
-        TechType = this.Info.TechType;
+        TechType = Info.TechType;
     }
 
     public void Patch()

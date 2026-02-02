@@ -5,8 +5,6 @@ internal class ExplosiveTorpedo
     public static string ClassID = "ExplosiveTorpedo";
     public static TechType TechType { get; private set; } = 0;
 
-
-    public static GameObject prefab;
     public PrefabInfo Info { get; private set; }
 
     public ExplosiveTorpedo()

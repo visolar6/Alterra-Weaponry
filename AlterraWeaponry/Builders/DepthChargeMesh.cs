@@ -1,5 +1,8 @@
 namespace VELD.AlterraWeaponry.Builders;
 
+/// <summary>
+/// Creates a mesh for the depth charge completely from Unity primitives. Get on my level, Blender.
+/// </summary>
 internal static class DepthChargeMesh
 {
     internal static readonly float SphereRadius = 0.4f;
@@ -9,13 +12,13 @@ internal static class DepthChargeMesh
     internal static readonly int SpikeCount = 24;
     internal static readonly int SpikeRings = 4;
 
-    private static Mesh _cachedBody;
-    private static Mesh _cachedButton;
+    private static Mesh? _cachedBody;
+    private static Mesh? _cachedButton;
 
     /// <summary>
     /// Caches the combined body mesh
     /// </summary>
-    private static void CacheBody()
+    private static Mesh CacheAndGetBody()
     {
         // Create main sphere mesh
         var sphereMesh = CreateSphereMesh();
@@ -26,16 +29,18 @@ internal static class DepthChargeMesh
         // Combine body meshes
         _cachedBody = CombineBodyMeshes(sphereMesh, spikeMeshes);
         _cachedBody.name = "DepthChargeBody";
+        return _cachedBody;
     }
 
     /// <summary>
     /// Caches the button mesh
     /// </summary>
-    private static void CacheButton()
+    private static Mesh CacheAndGetButton()
     {
         // Create button mesh
         _cachedButton = CreateCylinderMesh();
         _cachedButton.name = "DepthChargeButton";
+        return _cachedButton;
     }
 
     /// <summary>
@@ -45,7 +50,7 @@ internal static class DepthChargeMesh
     {
         if (_cachedBody == null)
         {
-            CacheBody();
+            return CacheAndGetBody();
         }
 
         return _cachedBody;
@@ -58,7 +63,7 @@ internal static class DepthChargeMesh
     {
         if (_cachedButton == null)
         {
-            CacheButton();
+            return CacheAndGetButton();
         }
 
         return _cachedButton;
@@ -161,9 +166,11 @@ internal static class DepthChargeMesh
 
         int vertexCount = segments * 2 + 2; // Top ring + bottom ring + 2 centers
         Vector3[] vertices = new Vector3[vertexCount];
+        Vector2[] uvs = new Vector2[vertexCount];
 
         // Top center
         vertices[0] = new Vector3(0, 1, 0);
+        uvs[0] = new Vector2(0.5f, 1f); // Top center UV
 
         // Top ring vertices
         for (int i = 0; i < segments; i++)
@@ -172,6 +179,8 @@ internal static class DepthChargeMesh
             float x = Mathf.Cos(angle) * SpikeTipRadius;
             float z = Mathf.Sin(angle) * SpikeTipRadius;
             vertices[i + 1] = new Vector3(x, 1, z);
+            // Map around the top edge
+            uvs[i + 1] = new Vector2((float)i / segments, 1f);
         }
 
         // Bottom ring vertices
@@ -181,10 +190,13 @@ internal static class DepthChargeMesh
             float x = Mathf.Cos(angle) * SpikeBaseRadius;
             float z = Mathf.Sin(angle) * SpikeBaseRadius;
             vertices[segments + 1 + i] = new Vector3(x, 0, z);
+            // Map around the bottom edge
+            uvs[segments + 1 + i] = new Vector2((float)i / segments, 0f);
         }
 
         // Bottom center
         vertices[segments * 2 + 1] = new Vector3(0, 0, 0);
+        uvs[segments * 2 + 1] = new Vector2(0.5f, 0f); // Bottom center UV
 
         // Calculate triangle count: top cap + sides (2 tris per segment) + bottom cap
         int[] triangles = new int[segments * 3 + segments * 6 + segments * 3];
@@ -231,6 +243,7 @@ internal static class DepthChargeMesh
 
         mesh.vertices = vertices;
         mesh.triangles = triangles;
+        mesh.uv = uvs;
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
 

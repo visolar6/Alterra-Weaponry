@@ -90,10 +90,8 @@ internal class GlobalInitializer
     internal static void PatchPDAEncyEntries()
     {
         // Coal entry
-        Sprite coalIcon = null;
-        Texture2D coalBanner = null;
-        Main.AssetsCache.TryGetAsset("Coal", out coalIcon);
-        Main.BannerAssetsCache.TryGetAsset("Coal_banner", out coalBanner);
+        Main.AssetsCache.TryGetAsset("Coal", out Sprite coalIcon);
+        Main.BannerAssetsCache.TryGetAsset("Coal_banner", out Texture2D coalBanner);
         PDAHandler.AddEncyclopediaEntry(
             "Coal",
             "Tech/Weaponry",
@@ -105,10 +103,8 @@ internal class GlobalInitializer
         );
 
         // BlackPowder entry
-        Sprite blackPowderIcon = null;
-        Texture2D blackPowderBanner = null;
-        Main.AssetsCache.TryGetAsset("BlackPowder", out blackPowderIcon);
-        Main.BannerAssetsCache.TryGetAsset("BlackPowder_banner", out blackPowderBanner);
+        Main.AssetsCache.TryGetAsset("BlackPowder", out Sprite blackPowderIcon);
+        Main.BannerAssetsCache.TryGetAsset("BlackPowder_banner", out Texture2D blackPowderBanner);
         PDAHandler.AddEncyclopediaEntry(
             "BlackPowder",
             "Tech/Weaponry",
@@ -120,10 +116,8 @@ internal class GlobalInitializer
         );
 
         // ExplosiveTorpedo entry
-        Sprite explosiveTorpedoIcon = null;
-        Texture2D explosiveTorpedoBanner = null;
-        Main.AssetsCache.TryGetAsset("ExplosiveTorpedo", out explosiveTorpedoIcon);
-        Main.BannerAssetsCache.TryGetAsset("ExplosiveTorpedo_banner", out explosiveTorpedoBanner);
+        Main.AssetsCache.TryGetAsset("ExplosiveTorpedo", out Sprite explosiveTorpedoIcon);
+        Main.BannerAssetsCache.TryGetAsset("ExplosiveTorpedo_banner", out Texture2D explosiveTorpedoBanner);
         PDAHandler.AddEncyclopediaEntry(
             "ExplosiveTorpedo",
             "Tech/Weaponry",
@@ -131,6 +125,28 @@ internal class GlobalInitializer
             Language.main.Get("EncyDesc_ExplosiveTorpedo"),
             explosiveTorpedoBanner,
             explosiveTorpedoIcon,
+            unlockSound: PDAHandler.UnlockImportant
+        );
+
+        // DepthCharge entry
+        Sprite? depthChargeIcon = null;
+        Texture2D? depthChargeBanner = null;
+        try
+        {
+            depthChargeIcon = ResourceHandler.LoadSpriteFromFile(Path.Combine("Assets", "Sprite", "depth-charge.png"));
+            depthChargeBanner = ResourceHandler.LoadTexture2DFromFile(Path.Combine("Assets", "Sprite", "depth-charge.png"));
+        }
+        catch (Exception)
+        {
+            Main.logger.LogError("Failed to load depth charge icon sprite for PDA encyclopedia entry.");
+        }
+        PDAHandler.AddEncyclopediaEntry(
+            "DepthCharge",
+            "Tech/Weaponry",
+            Language.main.Get("Ency_DepthCharge"),
+            Language.main.Get("EncyDesc_DepthCharge"),
+            depthChargeBanner,
+            depthChargeIcon,
             unlockSound: PDAHandler.UnlockImportant
         );
 

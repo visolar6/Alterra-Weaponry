@@ -1,4 +1,4 @@
-namespace VELD.AlterraWeaponry.Utils;
+namespace VELD.AlterraWeaponry.Utilities;
 
 /// <summary>
 /// Patches the BreakableResource class to handle custom outcrop drops.

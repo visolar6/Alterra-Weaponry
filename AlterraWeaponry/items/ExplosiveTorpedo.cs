@@ -5,8 +5,6 @@ internal class ExplosiveTorpedo
     public static string ClassID = "ExplosiveTorpedo";
     public static TechType TechType { get; private set; } = 0;
 
-
-    public static GameObject prefab;
     public PrefabInfo Info { get; private set; }
 
     public ExplosiveTorpedo()
@@ -43,11 +41,11 @@ internal class ExplosiveTorpedo
             Main.logger.LogInfo($"[ExplosiveTorpedo] ModifyPrefab called for {go.name}");
 
             // Use PersistentMarker instead - more robust
-            var marker = go.AddComponent<VELD.AlterraWeaponry.Behaviours.ExplosiveTorpedoPersistentMarker>();
+            var marker = go.AddComponent<VELD.AlterraWeaponry.Mono.ExplosiveTorpedoPersistentMarker>();
             Main.logger.LogInfo($"[ExplosiveTorpedo] Added ExplosiveTorpedoPersistentMarker to {go.name}");
 
             // Also add the regular marker as backup
-            go.AddComponent<VELD.AlterraWeaponry.Behaviours.ExplosiveTorpedoMarker>();
+            go.AddComponent<VELD.AlterraWeaponry.Mono.ExplosiveTorpedoMarker>();
             Main.logger.LogInfo($"[ExplosiveTorpedo] Added ExplosiveTorpedoMarker to {go.name}");
         };
 

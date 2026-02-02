@@ -11,30 +11,16 @@ fi
 SUBNAUTICA_PATH="${SUBNAUTICA_PATH:-D:/SteamLibrary/steamapps/common/Subnautica}"
 PLUGIN_DIR="$SUBNAUTICA_PATH/BepInEx/plugins/AlterraWeaponry"
 DLL_PATH="AlterraWeaponry/bin/Release/net472/AlterraWeaponry.dll"
-ASSETS_PATH="AlterraWeaponry/sn.alterraweaponry.assets"
-BANNER_ASSETS_PATH="AlterraWeaponry/sn.alterraweaponry_banners.assets"
+ASSETBUNDLE_PATH="AlterraWeaponry/sn.alterraweaponry.assets"
+BANNER_ASSETBUNDLE_PATH="AlterraWeaponry/sn.alterraweaponry_banners.assets"
 LOCALIZATION_PATH="AlterraWeaponry/Localizations.xml"
-MOD_JSON_PATH="AlterraWeaponry/mod.json"
+ASSETS_PATH="AlterraWeaponry/Assets"
 
 if [ -f "$DLL_PATH" ]; then
     mkdir -p "$PLUGIN_DIR"
     cp "$DLL_PATH" "$PLUGIN_DIR/"
     echo "✓ DLL copied to $PLUGIN_DIR"
-    
-    if [ -f "$ASSETS_PATH" ]; then
-        cp "$ASSETS_PATH" "$PLUGIN_DIR/"
-        echo "✓ Assets copied to $PLUGIN_DIR"
-    else
-        echo "✗ Assets not found at $ASSETS_PATH"
-    fi
 
-    if [ -f "$BANNER_ASSETS_PATH" ]; then
-        cp "$BANNER_ASSETS_PATH" "$PLUGIN_DIR/"
-        echo "✓ Banner assets copied to $PLUGIN_DIR"
-    else
-        echo "✗ Banner assets not found at $BANNER_ASSETS_PATH"
-    fi
-    
     if [ -f "$LOCALIZATION_PATH" ]; then
         cp "$LOCALIZATION_PATH" "$PLUGIN_DIR/"
         echo "✓ Localizations.xml copied to $PLUGIN_DIR"
@@ -42,11 +28,25 @@ if [ -f "$DLL_PATH" ]; then
         echo "✗ Localizations.xml not found at $LOCALIZATION_PATH"
     fi
     
-    if [ -f "$MOD_JSON_PATH" ]; then
-        cp "$MOD_JSON_PATH" "$PLUGIN_DIR/"
-        echo "✓ mod.json copied to $PLUGIN_DIR"
+    if [ -d "$ASSETS_PATH" ]; then
+        cp -r "$ASSETS_PATH" "$PLUGIN_DIR/"
+        echo "✓ Assets copied to $PLUGIN_DIR"
     else
-        echo "✗ mod.json not found at $MOD_JSON_PATH"
+        echo "✗ Assets not found at $ASSETS_PATH"
+    fi
+
+    if [ -f "$ASSETBUNDLE_PATH" ]; then
+        cp "$ASSETBUNDLE_PATH" "$PLUGIN_DIR/"
+        echo "✓ AssetBundle copied to $PLUGIN_DIR"
+    else
+        echo "✗ AssetBundle not found at $ASSETBUNDLE_PATH"
+    fi
+
+    if [ -f "$BANNER_ASSETBUNDLE_PATH" ]; then
+        cp "$BANNER_ASSETBUNDLE_PATH" "$PLUGIN_DIR/"
+        echo "✓ Banner assets copied to $PLUGIN_DIR"
+    else
+        echo "✗ Banner assets not found at $BANNER_ASSETBUNDLE_PATH"
     fi
 else
     echo "✗ DLL not found at $DLL_PATH"

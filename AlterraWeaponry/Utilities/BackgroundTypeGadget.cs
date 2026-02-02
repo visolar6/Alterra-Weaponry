@@ -5,7 +5,7 @@ using Nautilus.Assets;
 using Nautilus.Assets.Gadgets;
 using Nautilus.Handlers;
 
-namespace VELD.AlterraWeaponry.Utils;
+namespace VELD.AlterraWeaponry.Utilities;
 
 public class BackgroundTypeGadget : Gadget
 {

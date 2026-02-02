@@ -70,6 +70,9 @@ public class Main : BaseUnityPlugin
         PrawnSelfDefenseModule prawnSelfDefenseModule = new();
         prawnSelfDefenseModule.Patch();
 
+        DepthCharge depthCharge = new();
+        depthCharge.Patch();
+
         // PrawnLaserArm prawnLaserArm = new();
         // prawnLaserArm.Patch();
 

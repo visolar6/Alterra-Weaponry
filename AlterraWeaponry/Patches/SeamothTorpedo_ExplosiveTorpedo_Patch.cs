@@ -26,8 +26,8 @@ public class SeamothTorpedo_ExplosiveTorpedo_Patch
         Main.logger.LogInfo($"[ExplosiveTorpedo Patch] Explode() called for {__instance.gameObject.name}");
 
         // Check for the marker component directly - don't rely on tracking
-        var persistentMarker = __instance.GetComponent<VELD.AlterraWeaponry.Behaviours.ExplosiveTorpedoPersistentMarker>();
-        var regularMarker = __instance.GetComponent<VELD.AlterraWeaponry.Behaviours.ExplosiveTorpedoMarker>();
+        var persistentMarker = __instance.GetComponent<VELD.AlterraWeaponry.Mono.ExplosiveTorpedoPersistentMarker>();
+        var regularMarker = __instance.GetComponent<VELD.AlterraWeaponry.Mono.ExplosiveTorpedoMarker>();
 
         Main.logger.LogInfo($"[ExplosiveTorpedo Patch] HasPersistentMarker: {persistentMarker != null}, HasMarker: {regularMarker != null}");
 

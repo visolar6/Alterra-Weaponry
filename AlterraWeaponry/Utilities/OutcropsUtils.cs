@@ -1,4 +1,4 @@
-namespace VELD.AlterraWeaponry.Utils;
+namespace VELD.AlterraWeaponry.Utilities;
 
 /// <summary>
 /// Helper utilities for managing breakable resource (outcrop) drops.

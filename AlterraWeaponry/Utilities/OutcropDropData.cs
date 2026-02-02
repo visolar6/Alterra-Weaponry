@@ -1,4 +1,4 @@
-namespace VELD.AlterraWeaponry.Utils;
+namespace VELD.AlterraWeaponry.Utilities;
 
 /// <summary>
 /// Represents a single drop entry for breakable resources (outcrops).

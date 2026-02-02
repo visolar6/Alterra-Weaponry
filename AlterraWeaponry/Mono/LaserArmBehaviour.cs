@@ -1,4 +1,4 @@
-namespace VELD.AlterraWeaponry.Behaviours;
+namespace VELD.AlterraWeaponry.Mono;
 
 internal class LaserArmBehaviour : MonoBehaviour
 {

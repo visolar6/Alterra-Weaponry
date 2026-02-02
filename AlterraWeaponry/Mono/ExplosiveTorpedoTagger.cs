@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace VELD.AlterraWeaponry.Behaviours;
+namespace VELD.AlterraWeaponry.Mono;
 
 /// <summary>
 /// Behaviour added to ExplosiveTorpedo prefab that tags fired instances

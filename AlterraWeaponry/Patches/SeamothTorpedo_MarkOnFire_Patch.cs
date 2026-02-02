@@ -43,7 +43,7 @@ public class SeamothTorpedo_MarkOnFire_Patch
         }
 
         // Alternative: Check for marker that was added by prefab
-        var existingMarker = __instance.GetComponent<VELD.AlterraWeaponry.Behaviours.ExplosiveTorpedoMarker>();
+        var existingMarker = __instance.GetComponent<VELD.AlterraWeaponry.Mono.ExplosiveTorpedoMarker>();
         if (existingMarker != null)
         {
             Main.logger.LogInfo("[MarkOnFire] Already has marker!");

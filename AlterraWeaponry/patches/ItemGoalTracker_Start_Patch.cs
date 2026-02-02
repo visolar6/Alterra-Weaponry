@@ -47,16 +47,28 @@ internal class ItemGoalTracker_Start_Patch
         // BlackPowder → Unlock ExplosiveTorpedo recipe and ExplosiveTorpedo encyclopedia entry
         if (techType == BlackPowder.TechType)
         {
+            // Unlock ExplosiveTorpedo and encyclopedia entry
             if (!KnownTech.Contains(ExplosiveTorpedo.TechType))
             {
                 Main.logger.LogInfo($"BlackPowder picked up! Unlocking ExplosiveTorpedo recipe.");
                 KnownTech.Add(ExplosiveTorpedo.TechType);
             }
-            // Unlock ExplosiveTorpedo encyclopedia entry
             if (!PDAEncyclopedia.ContainsEntry("ExplosiveTorpedo"))
             {
                 Main.logger.LogInfo($"BlackPowder picked up! Unlocking ExplosiveTorpedo encyclopedia entry.");
                 PDAEncyclopedia.Add("ExplosiveTorpedo", true);
+            }
+
+            // Unlock DepthCharge and encyclopedia entry
+            if (!KnownTech.Contains(DepthCharge.TechType))
+            {
+                Main.logger.LogInfo($"BlackPowder picked up! Unlocking DepthCharge recipe.");
+                KnownTech.Add(DepthCharge.TechType);
+            }
+            if (!PDAEncyclopedia.ContainsEntry("DepthCharge"))
+            {
+                Main.logger.LogInfo($"BlackPowder picked up! Unlocking DepthCharge encyclopedia entry.");
+                PDAEncyclopedia.Add("DepthCharge", true);
             }
 
             // Check if goal already completed
@@ -69,8 +81,6 @@ internal class ItemGoalTracker_Start_Patch
                 Main.logger.LogInfo("Triggering AWFirstLethal story goal!");
                 StoryGoal.Execute("AWFirstLethal", Story.GoalType.PDA);
             }
-
-
         }
     }
 }

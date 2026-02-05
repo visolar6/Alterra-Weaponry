@@ -1,6 +1,4 @@
-﻿using VELD.AlterraWeaponry.Items.DepthCharge;
-
-namespace VELD.AlterraWeaponry;
+﻿namespace VELD.AlterraWeaponry;
 
 [BepInPlugin(modGUID, modName, modVers)]
 public class Main : BaseUnityPlugin

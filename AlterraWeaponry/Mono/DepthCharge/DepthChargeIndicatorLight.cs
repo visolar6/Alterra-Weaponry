@@ -1,4 +1,4 @@
-// namespace VELD.AlterraWeaponry.Items.DepthCharge;
+// namespace VELD.AlterraWeaponry.Mono.DepthCharge;
 
 // /// <summary>
 // /// Handles the blinking indicator light on the depth charge.

@@ -1,4 +1,4 @@
-namespace VELD.AlterraWeaponry.Items.DepthCharge;
+namespace VELD.AlterraWeaponry.Mono.DepthCharge;
 
 /// <summary>
 /// Creates a mesh for the depth charge completely from Unity primitives. Get on my level, Blender.

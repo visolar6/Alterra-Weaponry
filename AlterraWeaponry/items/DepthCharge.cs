@@ -1,4 +1,6 @@
-namespace VELD.AlterraWeaponry.Items.DepthCharge;
+using VELD.AlterraWeaponry.Mono.DepthCharge;
+
+namespace VELD.AlterraWeaponry.Items;
 
 /// <summary>
 /// The depth charge is a throwable explosive device that detonates underwater after being primed and dropped into the water, and coming into contact with

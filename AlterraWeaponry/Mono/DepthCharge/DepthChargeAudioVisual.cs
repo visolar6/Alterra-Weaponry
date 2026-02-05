@@ -1,6 +1,4 @@
-namespace VELD.AlterraWeaponry.Items.DepthCharge;
-
-using VELD.AlterraWeaponry.Utilities;
+namespace VELD.AlterraWeaponry.Mono.DepthCharge;
 
 public class DepthChargeAudioVisual : MonoBehaviour
 {

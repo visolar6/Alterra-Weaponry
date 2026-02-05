@@ -1,4 +1,4 @@
-namespace VELD.AlterraWeaponry.Items.DepthCharge;
+namespace VELD.AlterraWeaponry.Mono.DepthCharge;
 
 public class DepthChargeManager : MonoBehaviour
 {

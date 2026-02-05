@@ -1,4 +1,6 @@
-﻿namespace VELD.AlterraWeaponry.Patches;
+﻿using VELD.AlterraWeaponry.Items.DepthCharge;
+
+namespace VELD.AlterraWeaponry.Patches;
 
 [HarmonyPatch(typeof(Pickupable))]
 internal class ItemGoalTracker_Start_Patch

@@ -1,4 +1,4 @@
-using VELD.AlterraWeaponry.Mono.DepthCharge;
+using VELD.AlterraWeaponry.Items.DepthCharge;
 
 namespace VELD.AlterraWeaponry.Patches;
 

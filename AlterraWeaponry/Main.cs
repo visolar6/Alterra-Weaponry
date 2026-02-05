@@ -28,9 +28,14 @@ public class Main : BaseUnityPlugin
         logger = Logger;
         try
         {
-            AssetsCache = ResourcesCacheManager.LoadResources(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "sn.alterraweaponry.assets"));
-            BannerAssetsCache = ResourcesCacheManager.LoadResources(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "sn.alterraweaponry_banners.assets"));
-            logger.LogInfo("Successfully loaded resources to cache.");
+            var basePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+            AssetsCache = ResourcesCacheManager.LoadResources(Path.Combine(basePath, "sn.alterraweaponry.assets"));
+            BannerAssetsCache = ResourcesCacheManager.LoadResources(Path.Combine(basePath, "sn.alterraweaponry_banners.assets"));
+
+            var soundSource = new ModFolderSoundSource(Path.Combine(basePath, "Assets", "Audio"));
+            var builder = new FModSoundBuilder(soundSource);
+            ExplosionAudio.RegisterEvents(builder);
         }
         catch (Exception ex)
         {

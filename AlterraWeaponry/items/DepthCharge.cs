@@ -16,8 +16,6 @@ internal class DepthCharge
 
     public DepthCharge()
     {
-        Main.logger.LogInfo("Initializing DepthCharge...");
-
         Sprite? icon;
         try
         {
@@ -38,8 +36,6 @@ internal class DepthCharge
 
     public void Patch()
     {
-        Main.logger.LogInfo("Patching DepthCharge...");
-
         RecipeData recipe = new()
         {
             craftAmount = 1,

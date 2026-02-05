@@ -14,38 +14,21 @@ internal static class DepthChargeBuilder
     {
         try
         {
-            Main.logger.LogInfo("DepthChargeBuilder.CreateGameObject - Starting creation");
             var go = new GameObject("DepthCharge");
-            Main.logger.LogInfo("DepthChargeBuilder.CreateGameObject - GameObject created");
 
             SetupMeshAndRenderer(go);
-            Main.logger.LogInfo("DepthChargeBuilder.CreateGameObject - Mesh and renderer setup complete");
-
             SetupPhysics(go);
-            Main.logger.LogInfo("DepthChargeBuilder.CreateGameObject - Physics setup complete");
-
             SetupWorldComponents(go, techType);
-            Main.logger.LogInfo("DepthChargeBuilder.CreateGameObject - World components setup complete");
-
             SetupCollider(go);
-            Main.logger.LogInfo("DepthChargeBuilder.CreateGameObject - Collider setup complete");
-
             SetupVFXAndBehavior(go);
-            Main.logger.LogInfo("DepthChargeBuilder.CreateGameObject - VFX and behavior setup complete");
-
             SetupLiveMixin(go);
-            Main.logger.LogInfo("DepthChargeBuilder.CreateGameObject - LiveMixin setup complete");
-
             SetupIndicatorLight(go);
-            Main.logger.LogInfo("DepthChargeBuilder.CreateGameObject - Indicator light setup complete");
 
             MaterialUtils.ApplySNShaders(go);
-            Main.logger.LogInfo("DepthChargeBuilder.CreateGameObject - Shaders applied");
 
             go.tag = "Untagged";
             go.layer = 0;
 
-            Main.logger.LogInfo("DepthChargeBuilder.CreateGameObject - Creation successful, returning GameObject");
             return go;
         }
         catch (Exception ex)
@@ -71,7 +54,6 @@ internal static class DepthChargeBuilder
         if (metalTexture != null)
         {
             mat.mainTexture = metalTexture;
-            Main.logger.LogInfo("metal.png texture loaded and applied to depth charge material.");
         }
         else
         {

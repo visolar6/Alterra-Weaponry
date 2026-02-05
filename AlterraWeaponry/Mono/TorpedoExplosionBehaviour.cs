@@ -8,7 +8,6 @@ public class TorpedoExplosionBehaviour : MonoBehaviour
 
     public void Start()
     {
-        Main.logger.LogInfo("Releasing explosion !");
         DamageSystem.RadiusDamage((250f * Main.Options.explosionDamageMultiplier), gameObject.transform.position, 10f, DamageType.Explosive, gameObject);
 #if BELOWZERO
         try
@@ -29,28 +28,23 @@ public class TorpedoExplosionBehaviour : MonoBehaviour
         // FX loading is optional - damage is applied above and is what matters
 #endif
         Destroy(gameObject, 10.0f);  // Long delay to let damage system finish
-        Main.logger.LogInfo("Exploded !!!");
     }
 
     public static GameObject detonationPrefab;
 
     public static IEnumerator SetupDetonationPrefabAsync()
     {
-        Main.logger.LogInfo($"{typeof(TorpedoExplosionBehaviour).FullName}: Setting up detonation prefab for explosive torpedo...");
         if (detonationPrefab != null)
         {
-            Main.logger.LogInfo($"{typeof(TorpedoExplosionBehaviour).FullName}: detonationPrefab is already defined.");
             yield break;
         }
 
         // Try to get the Crashfish explosion prefab directly
-        Main.logger.LogInfo($"{typeof(TorpedoExplosionBehaviour).FullName}: Loading ExplosionPrefab...");
         var explosionTask = PrefabDatabase.GetPrefabAsync("29619c37-13eb-4a21-b762-deac4cbe41fb"); // ExplosionPrefab
         yield return explosionTask;
 
         if (explosionTask.TryGetPrefab(out detonationPrefab))
         {
-            Main.logger.LogInfo($"{typeof(TorpedoExplosionBehaviour).FullName}: Using ExplosionPrefab: {detonationPrefab.name}");
             yield break;
         }
 

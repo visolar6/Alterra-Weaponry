@@ -38,15 +38,10 @@ internal class ExplosiveTorpedo
         // Add marker component to the cloned template
         clone.ModifyPrefab += go =>
         {
-            Main.logger.LogInfo($"[ExplosiveTorpedo] ModifyPrefab called for {go.name}");
-
             // Use PersistentMarker instead - more robust
-            var marker = go.AddComponent<VELD.AlterraWeaponry.Mono.ExplosiveTorpedoPersistentMarker>();
-            Main.logger.LogInfo($"[ExplosiveTorpedo] Added ExplosiveTorpedoPersistentMarker to {go.name}");
-
+            var marker = go.AddComponent<ExplosiveTorpedoPersistentMarker>();
             // Also add the regular marker as backup
-            go.AddComponent<VELD.AlterraWeaponry.Mono.ExplosiveTorpedoMarker>();
-            Main.logger.LogInfo($"[ExplosiveTorpedo] Added ExplosiveTorpedoMarker to {go.name}");
+            go.AddComponent<ExplosiveTorpedoMarker>();
         };
 
         customPrefab.SetGameObject(clone);

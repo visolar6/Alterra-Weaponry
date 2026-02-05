@@ -1,6 +1,3 @@
-using UnityEngine;
-using System.Collections;
-
 namespace VELD.AlterraWeaponry.Utilities;
 
 /// <summary>
@@ -23,23 +20,24 @@ public static class ExplosionVFX
         yield return coroutineRunner.StartCoroutine(SpawnCustomExplosionCoroutine(radius, position, coroutineRunner));
 
         // Parameters for pulses
-        int pulseCount = 5;
-        float pulseInterval = 0.5f;
-        float pulseScale = radius / 2; // Start at half size
+        int pulseCount = 3;
+        float pulseInterval = 0.35f;
+        float pulseScale = radius / 8; // Start at eighth size
         float scaleDecay = 0.5f; // Each pulse is half the previous
 
         for (int i = 0; i < pulseCount; i++)
         {
             yield return new WaitForSeconds(pulseInterval);
-            coroutineRunner.StartCoroutine(SpawnPulseExplosionCoroutine(position, pulseScale, coroutineRunner));
+            coroutineRunner.StartCoroutine(SpawnPulseExplosionCoroutine(position, pulseScale));
             pulseScale *= scaleDecay;
         }
     }
 
+    // NOTE: THIS IS PERFECT, DO NOT CHANGE THE PULSE EXPLOSION
     /// <summary>
     /// Spawns a crashfish explosion for a pressure pulse (no light).
     /// </summary>
-    public static IEnumerator SpawnPulseExplosionCoroutine(Vector3 position, float scale, MonoBehaviour coroutineRunner)
+    public static IEnumerator SpawnPulseExplosionCoroutine(Vector3 position, float scale)
     {
         // Use Crashfish explosion particles
         var crashfishTask = CraftData.GetPrefabForTechTypeAsync(TechType.Crash);
@@ -59,7 +57,7 @@ public static class ExplosionVFX
                 {
                     var main = ps.main;
                     main.scalingMode = ParticleSystemScalingMode.Hierarchy;
-                    main.startSizeMultiplier *= scale * 2f;
+                    main.startSizeMultiplier *= scale * 1.5f;
                     main.startSpeedMultiplier *= scale;
                     ps.Play();
                 }
@@ -77,13 +75,24 @@ public static class ExplosionVFX
         var light = flashObj.AddComponent<Light>();
         light.type = LightType.Point;
         light.color = new Color(1f, 0.7f, 0.3f); // Orange-yellow
-        light.intensity = 9f;
-        light.range = radius;
+        light.intensity = 8f;
+        light.range = radius * 3f;
         light.shadows = LightShadows.None;
 
         // Animate the light
         coroutineRunner.StartCoroutine(AnimateExplosionLightCoroutine(radius, light, flashObj));
+
         // 2. Use Crashfish explosion particles (proven to work)
+        coroutineRunner.StartCoroutine(SpawnCrashfishExplosionCoroutine(radius, position));
+
+        // 3. Create visible shockwave effect
+        coroutineRunner.StartCoroutine(CreateShockwaveCoroutine(radius, position, coroutineRunner));
+        yield return null;
+    }
+
+    public static IEnumerator SpawnCrashfishExplosionCoroutine(float radius, Vector3 position)
+
+    {
         var crashfishTask = CraftData.GetPrefabForTechTypeAsync(TechType.Crash);
         yield return crashfishTask;
 
@@ -94,23 +103,25 @@ public static class ExplosionVFX
             if (crash != null && crash.detonateParticlePrefab != null)
             {
                 // Instantiate the explosion particle and scale it
+                float scale = radius / 5f;
                 var explosion = UnityEngine.Object.Instantiate(crash.detonateParticlePrefab, position, Quaternion.identity);
-                explosion.transform.localScale = Vector3.one * radius;
+                explosion.transform.localScale = Vector3.one * scale;
 
+                // Set proper scaling mode and apply scale to particle systems
                 var particleSystems = explosion.GetComponentsInChildren<ParticleSystem>();
                 foreach (var ps in particleSystems)
                 {
                     var main = ps.main;
-                    main.scalingMode = ParticleSystemScalingMode.Hierarchy;
-                    main.startSizeMultiplier *= radius * 2f;
-                    main.startSpeedMultiplier *= radius;
+                    main.scalingMode = ParticleSystemScalingMode.Hierarchy; // Makes particles scale properly with transform
+                    main.startSizeMultiplier *= scale; // Also scale the particle sizes
+                    main.startSpeedMultiplier *= scale; // Scale particle speed to match size
+                    var translucentColor = Main.Options.explosionColor;
+                    translucentColor.a *= 0.4f;
+                    main.startColor = new ParticleSystem.MinMaxGradient(translucentColor); // Apply custom color
                     ps.Play();
                 }
             }
         }
-
-        // 3. Create visible shockwave effect
-        coroutineRunner.StartCoroutine(CreateShockwaveCoroutine(radius, position, coroutineRunner));
     }
 
     public static IEnumerator AnimateExplosionLightCoroutine(float radius, Light light, GameObject lightObj)
@@ -134,7 +145,7 @@ public static class ExplosionVFX
                 light.intensity = 15f * Mathf.Exp(-(t - 0.1f) * 5f);
             }
 
-            light.range = radius * 2f * (1f - t * 0.5f);
+            light.range = radius * 3f * (1f - t * 0.5f);
 
             yield return null;
         }

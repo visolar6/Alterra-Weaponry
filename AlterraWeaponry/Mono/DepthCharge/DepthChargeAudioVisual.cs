@@ -4,14 +4,6 @@ public class DepthChargeAudioVisual : MonoBehaviour
 {
     /* Private Fields */
 
-    // Audio clips and sources for audio effects
-    private AudioClip? beepClip;
-    private AudioClip? underwaterExplosionClip;
-    private AudioSource? primingAudioSource;
-    private AudioSource? primedAudioSource;
-    private AudioSource? collisionAudioSource;
-    private AudioSource? explosionAudioSource;
-
     // Indicator light and material for visual effects
     private Light? indicatorLight;
     private MeshRenderer? meshRenderer;
@@ -73,70 +65,8 @@ public class DepthChargeAudioVisual : MonoBehaviour
     private void Initialize()
     {
         // If already initialized, skip
-        if (beepClip != null && underwaterExplosionClip != null &&
-            primingAudioSource != null && primedAudioSource != null &&
-            collisionAudioSource != null && explosionAudioSource != null &&
-            indicatorLight != null && meshRenderer != null && meshRenderer.material != null)
+        if (indicatorLight != null && meshRenderer != null && meshRenderer.material != null)
             return;
-
-        // Load the primed AudioClip
-        string beepClipPath = Path.Combine("Assets", "Audio", "beep.wav");
-        beepClip = ResourceHandler.LoadAudioClipFromFile(beepClipPath);
-        if (beepClip == null)
-            Main.logger.LogError($"Failed to load primed AudioClip from {beepClipPath}");
-
-        string underwaterExplosionClipPath = Path.Combine("Assets", "Audio", "underwater-explosion.wav");
-        underwaterExplosionClip = ResourceHandler.LoadAudioClipFromFile(underwaterExplosionClipPath);
-        if (underwaterExplosionClip == null)
-            Main.logger.LogError($"Failed to load explosion AudioClip from {underwaterExplosionClipPath}");
-
-        // Setup AudioSource for priming sound
-        primingAudioSource = gameObject.AddComponent<AudioSource>();
-        primingAudioSource.playOnAwake = false;
-        primingAudioSource.loop = false;
-        primingAudioSource.volume = 0.2f;
-        primingAudioSource.pitch = 0.8f;
-        primingAudioSource.spatialize = true;
-        primingAudioSource.spatialBlend = 1f; // 3D sound
-        primingAudioSource.minDistance = 1f;
-        primingAudioSource.maxDistance = 5f;
-        primingAudioSource.rolloffMode = AudioRolloffMode.Linear;
-
-        // Setup AudioSource for primed sound
-        primedAudioSource = gameObject.AddComponent<AudioSource>();
-        primedAudioSource.playOnAwake = false;
-        primedAudioSource.loop = false;
-        primedAudioSource.volume = 0.2f;
-        primedAudioSource.pitch = 1.0f;
-        primedAudioSource.spatialize = true;
-        primedAudioSource.spatialBlend = 1f;
-        primedAudioSource.minDistance = 1f;
-        primedAudioSource.maxDistance = 5f;
-        primedAudioSource.rolloffMode = AudioRolloffMode.Linear;
-
-        // Setup AudioSource for collision sound
-        collisionAudioSource = gameObject.AddComponent<AudioSource>();
-        collisionAudioSource.playOnAwake = false;
-        collisionAudioSource.loop = false;
-        collisionAudioSource.volume = 0.4f;
-        collisionAudioSource.pitch = 1.2f;
-        collisionAudioSource.spatialize = true;
-        collisionAudioSource.spatialBlend = 1f;
-        collisionAudioSource.minDistance = 1f;
-        collisionAudioSource.maxDistance = 5f;
-        collisionAudioSource.rolloffMode = AudioRolloffMode.Linear;
-
-        // Setup explosion AudioSource and load clip
-        explosionAudioSource = gameObject.AddComponent<AudioSource>();
-        explosionAudioSource.playOnAwake = false;
-        explosionAudioSource.loop = false;
-        explosionAudioSource.volume = 1f;
-        explosionAudioSource.pitch = 1.0f;
-        explosionAudioSource.spatialize = true;
-        explosionAudioSource.spatialBlend = 1f;
-        explosionAudioSource.minDistance = 1f;
-        explosionAudioSource.maxDistance = 25f;
-        explosionAudioSource.rolloffMode = AudioRolloffMode.Linear;
 
         indicatorLight = GetComponentInChildren<Light>();
         meshRenderer = GetComponentInChildren<MeshRenderer>();
@@ -158,7 +88,7 @@ public class DepthChargeAudioVisual : MonoBehaviour
         {
             nextEventTime += DepthChargeConstants.primingIndicatorInterval;
             yield return StartCoroutine(TimingUtility.WaitUntilTime(nextEventTime, this));
-            primingAudioSource!.PlayOneShot(beepClip);
+            ExplosionAudio.PlayBeep(transform.position);
             StartCoroutine(FlashIndicatorLight(DepthChargeConstants.primingIndicatorIntensity, DepthChargeConstants.primingIndicatorEmission, DepthChargeConstants.primingIndicatorDuration));
         }
     }
@@ -172,7 +102,8 @@ public class DepthChargeAudioVisual : MonoBehaviour
         {
             nextEventTime += DepthChargeConstants.armedIndicatorInitialInterval;
             yield return StartCoroutine(TimingUtility.WaitUntilTime(nextEventTime, this));
-            primedAudioSource!.PlayOneShot(beepClip);
+            ExplosionAudio.PlayBeep(transform.position);
+            Main.logger.LogInfo($"[Armed Initial Beep {i + 1}] Played beep at position: {transform.position}, (player position: {Player.main?.gameObject.transform.position})");
             StartCoroutine(FlashIndicatorLight(DepthChargeConstants.armedIndicatorInitialIntensity, DepthChargeConstants.armedIndicatorInitialEmission, DepthChargeConstants.armedIndicatorInitialDuration));
         }
     }
@@ -183,7 +114,7 @@ public class DepthChargeAudioVisual : MonoBehaviour
 
         float nextEventTime = Time.time;
         yield return StartCoroutine(TimingUtility.WaitUntilTime(nextEventTime, this));
-        primedAudioSource!.PlayOneShot(beepClip);
+        ExplosionAudio.PlayBeep(transform.position);
         StartCoroutine(FlashIndicatorLight(DepthChargeConstants.armedIndicatorCycleIntensity, DepthChargeConstants.armedIndicatorCycleEmission, DepthChargeConstants.armedIndicatorCycleDuration));
     }
 
@@ -196,7 +127,7 @@ public class DepthChargeAudioVisual : MonoBehaviour
         {
             nextEventTime += DepthChargeConstants.collisionIndicatorInterval;
             yield return StartCoroutine(TimingUtility.WaitUntilTime(nextEventTime, this));
-            collisionAudioSource!.PlayOneShot(beepClip);
+            ExplosionAudio.PlayBeep(transform.position);
             StartCoroutine(FlashIndicatorLight(DepthChargeConstants.collisionIndicatorIntensity, DepthChargeConstants.collisionIndicatorEmission, DepthChargeConstants.collisionIndicatorDuration));
         }
     }
@@ -205,8 +136,8 @@ public class DepthChargeAudioVisual : MonoBehaviour
     {
         Initialize();
 
-        explosionAudioSource!.PlayOneShot(underwaterExplosionClip);
-        ExplosionVFX.SpawnMultiPulseExplosion(DepthChargeConstants.explosionRadius, transform.position, this);
+        ExplosionAudio.PlayUnderwaterExplosion(transform.position);
+        ExplosionVFX.SpawnMultiPulseExplosion(DepthChargeConstants.explosionRadius / 2, transform.position, this);
         yield return null;
     }
 
@@ -224,16 +155,5 @@ public class DepthChargeAudioVisual : MonoBehaviour
     {
         indicatorLight!.intensity = intensity;
         material!.SetColor("_EmissionColor", emission);
-    }
-
-    private void Update()
-    {
-        if (primedAudioSource != null)
-        {
-            Main.logger.LogDebug($"Audio Source - Spatialize: {primedAudioSource.spatialize}, " +
-                $"SpatialBlend: {primedAudioSource.spatialBlend}, " +
-                $"Position: {gameObject.transform.position}, " +
-                $"Distance to camera: {Vector3.Distance(gameObject.transform.position, Camera.main.transform.position)}");
-        }
     }
 }

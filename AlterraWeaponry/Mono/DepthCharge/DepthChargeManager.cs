@@ -2,6 +2,9 @@ namespace VELD.AlterraWeaponry.Mono.DepthCharge;
 
 public class DepthChargeManager : MonoBehaviour
 {
+    // Static dictionary to persist state across entity unload/reload
+    private static readonly Dictionary<string, DepthChargeState> stateCache = [];
+
     public DepthChargeState CurrentState { get; private set; } = DepthChargeState.Inactive;
     public float LastChangeTime { get; private set; } = 0f;
 
@@ -11,7 +14,8 @@ public class DepthChargeManager : MonoBehaviour
     public bool IsStateCollision => CurrentState == DepthChargeState.Collision;
     public bool IsStateDetonated => CurrentState == DepthChargeState.Detonated;
 
-    private PrefabIdentifier? pid;
+    private PrefabIdentifier? prefabIdentifier;
+    private Pickupable? pickupable;
     private DepthChargeAudioVisual? av;
 
     private Coroutine? armedIndicatorCycleCoroutine;
@@ -22,36 +26,45 @@ public class DepthChargeManager : MonoBehaviour
 
     private void Awake()
     {
-        pid = GetComponent<PrefabIdentifier>();
+        prefabIdentifier = GetComponent<PrefabIdentifier>();
+        pickupable = GetComponent<Pickupable>();
         av = GetComponent<DepthChargeAudioVisual>();
+
+        // Restore state from cache if it exists
+        if (prefabIdentifier != null && stateCache.TryGetValue(prefabIdentifier.Id, out var cachedState))
+        {
+            Main.logger.LogInfo($"DepthChargeManager - Restored state {cachedState} from cache for ID {prefabIdentifier.Id}");
+            CurrentState = cachedState;
+        }
+    }
+
+    private void Start()
+    {
+        // Auto-prime if spawned in the world (not in inventory)
+        if (pickupable != null && IsStateInactive)
+        {
+            // Use reflection to check if the item is in inventory
+            var inventoryItemField = typeof(Pickupable).GetField("inventoryItem", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (inventoryItemField != null)
+            {
+                var inventoryItem = inventoryItemField.GetValue(pickupable);
+                if (inventoryItem == null)
+                {
+                    Main.logger.LogInfo("DepthChargeManager - Auto-priming spawned depth charge (not in inventory)");
+                    ChangeState(DepthChargeState.Priming);
+                    Invoke(nameof(Arm), 0.5f);
+                }
+            }
+        }
     }
 
     private void Update()
     {
-        if (IsStateArmed)
+        if (!IsStateArmed && armedIndicatorCycleCoroutine != null)
         {
-            // Handle armed indicator light cycling
-            if (armedIndicatorCycleCoroutine == null)
-            {
-                Main.logger.LogInfo("DepthChargeManager - Starting armed indicator cycle coroutine");
-                armedIndicatorCycleCoroutine = StartCoroutine(PlayArmedCycleLoop());
-            }
-        }
-        else
-        {
-            // Stop armed indicator cycling if not in Armed state
-            if (armedIndicatorCycleCoroutine != null)
-            {
-                Main.logger.LogInfo($"DepthChargeManager - Stopping armed indicator cycle coroutine (state changed to {CurrentState})");
-                StopCoroutine(armedIndicatorCycleCoroutine);
-                armedIndicatorCycleCoroutine = null;
-            }
-
-            // Automatically arm after priming duration
-            if (IsStatePriming && Time.time >= LastChangeTime + DepthChargeConstants.primingIndicatorDuration)
-            {
-                Arm();
-            }
+            Main.logger.LogInfo($"DepthChargeManager - Stopping armed indicator cycle coroutine (state changed to {CurrentState})");
+            StopCoroutine(armedIndicatorCycleCoroutine);
+            armedIndicatorCycleCoroutine = null;
         }
     }
 
@@ -64,6 +77,16 @@ public class DepthChargeManager : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        // Clean up the cached state when the depth charge is destroyed
+        if (prefabIdentifier != null && CurrentState == DepthChargeState.Detonated)
+        {
+            stateCache.Remove(prefabIdentifier.Id);
+            Main.logger.LogInfo($"DepthChargeManager - Removed cached state for ID {prefabIdentifier.Id}");
+        }
+    }
+
 
 
     /* Public Methods */
@@ -71,7 +94,14 @@ public class DepthChargeManager : MonoBehaviour
     public void Deactivate()
     {
         Main.logger.LogInfo("DepthChargeManager Deactivate called");
-        if (HasDisallowedState([DepthChargeState.Inactive, DepthChargeState.Collision, DepthChargeState.Detonated]))
+        if (IsStateInactive)
+        {
+            Main.logger.LogInfo("DepthChargeManager - Depth Charge is already inactive.");
+            return;
+        }
+
+
+        if (HasDisallowedState([DepthChargeState.Collision, DepthChargeState.Detonated]))
             return;
 
         ChangeState(DepthChargeState.Inactive);
@@ -81,6 +111,13 @@ public class DepthChargeManager : MonoBehaviour
 
     public void Prime()
     {
+        IEnumerator ArmAfterwards()
+        {
+            float totalPrimingTime = DepthChargeConstants.primingIndicatorCount * DepthChargeConstants.primingIndicatorInterval;
+            yield return new WaitForSeconds(totalPrimingTime);
+            Arm();
+        }
+
         Main.logger.LogInfo("DepthChargeManager Prime called");
         if (HasDisallowedState([DepthChargeState.Priming, DepthChargeState.Armed, DepthChargeState.Collision, DepthChargeState.Detonated]))
             return;
@@ -95,6 +132,7 @@ public class DepthChargeManager : MonoBehaviour
         ChangeState(DepthChargeState.Priming);
 
         av?.PlayPriming();
+        StartCoroutine(ArmAfterwards());
     }
 
     public void Arm()
@@ -113,10 +151,19 @@ public class DepthChargeManager : MonoBehaviour
         ChangeState(DepthChargeState.Armed);
 
         av?.PlayArmedInitial();
+        Main.logger.LogInfo("DepthChargeManager - Starting armed indicator cycle coroutine");
+        armedIndicatorCycleCoroutine = StartCoroutine(PlayArmedCycleLoop());
     }
 
     public void Collide()
     {
+        IEnumerator DetonateAfterwards()
+        {
+            float totalCollisionTime = DepthChargeConstants.collisionIndicatorCount * DepthChargeConstants.collisionIndicatorInterval;
+            yield return new WaitForSeconds(7f);
+            Detonate();
+        }
+
         Main.logger.LogInfo("DepthChargeManager Collide called");
         if (HasDisallowedState([DepthChargeState.Inactive, DepthChargeState.Priming, DepthChargeState.Detonated]))
             return;
@@ -129,9 +176,9 @@ public class DepthChargeManager : MonoBehaviour
 
         Main.logger.LogInfo("DepthChargeManager - Transitioning to Collision state");
         ChangeState(DepthChargeState.Collision);
-        // collisionDetectedAt = Time.time;
 
         av?.PlayCollision();
+        StartCoroutine(DetonateAfterwards());
     }
 
     public void Detonate(float? overrideDelay = null)
@@ -157,6 +204,13 @@ public class DepthChargeManager : MonoBehaviour
         Main.logger.LogInfo($"DepthChargeManager Change - State change from {CurrentState} to {newState} at time {Time.time}");
         CurrentState = newState;
         LastChangeTime = Time.time;
+
+        // Cache the state by ID for persistence across unload/reload
+        if (prefabIdentifier != null)
+        {
+            stateCache[prefabIdentifier.Id] = newState;
+            Main.logger.LogInfo($"DepthChargeManager - Cached state {newState} for ID {prefabIdentifier.Id}");
+        }
     }
 
     private bool HasDisallowedState(DepthChargeState[] disallowedStates)

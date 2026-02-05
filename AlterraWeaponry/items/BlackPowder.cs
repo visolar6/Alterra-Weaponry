@@ -34,9 +34,9 @@ internal class BlackPowder
             ]
         };
 
-        CustomPrefab customPrefab = new(this.Info);
+        CustomPrefab customPrefab = new(Info);
 
-        customPrefab.SetGameObject(SetupGameObject());
+        customPrefab.SetGameObject(() => SetupGameObject());
         customPrefab.SetPdaGroupCategoryBefore(TechGroup.Resources, TechCategory.AdvancedMaterials, TechType.HydrochloricAcid);
         // Do not call SetEquipment for non-equippable items
         customPrefab.SetRecipe(recipe)

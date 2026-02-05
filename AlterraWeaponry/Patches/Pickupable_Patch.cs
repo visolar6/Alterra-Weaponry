@@ -1,8 +1,20 @@
-﻿namespace VELD.AlterraWeaponry.Patches;
+﻿using VELD.AlterraWeaponry.Mono.DepthCharge;
+
+namespace VELD.AlterraWeaponry.Patches;
 
 [HarmonyPatch(typeof(Pickupable))]
 internal class ItemGoalTracker_Start_Patch
 {
+
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(Pickupable.Drop), [typeof(Vector3), typeof(Vector3), typeof(bool)])]
+    public static void Drop_Postfix(Pickupable __instance)
+    {
+        // Trigger DepthCharge priming (if applicable)
+        var depthChargeManager = __instance.GetComponent<DepthChargeManager>();
+        depthChargeManager?.Prime();
+    }
+
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Pickupable.Pickup))]
     public static void Pickup_Postfix(Pickupable __instance)
@@ -10,8 +22,15 @@ internal class ItemGoalTracker_Start_Patch
         if (__instance == null)
             return;
 
-        TechType techType = __instance.GetTechType();
+        // Trigger DepthCharge state reset (if applicable)
+        var depthChargeManager = __instance.GetComponent<DepthChargeManager>();
+        if (depthChargeManager != null)
+        {
+            depthChargeManager.Deactivate();
+            return;
+        }
 
+        TechType techType = __instance.GetTechType();
         // Creepvine → Unlock Coal recipe and Coal encyclopedia entry
         if (techType == TechType.CreepvineSeedCluster || techType == TechType.CreepvinePiece)
         {
@@ -27,7 +46,6 @@ internal class ItemGoalTracker_Start_Patch
                 PDAEncyclopedia.Add("Coal", true);
             }
         }
-
         // Coal → Unlock BlackPowder recipe and BlackPowder encyclopedia entry
         if (techType == Coal.TechType)
         {
@@ -43,8 +61,7 @@ internal class ItemGoalTracker_Start_Patch
                 PDAEncyclopedia.Add("BlackPowder", true);
             }
         }
-
-        // BlackPowder → Unlock ExplosiveTorpedo recipe and ExplosiveTorpedo encyclopedia entry
+        // BlackPowder → Unlock ExplosiveTorpedo/DepthCharge recipe and ExplosiveTorpedo/DepthCharge encyclopedia entry
         if (techType == BlackPowder.TechType)
         {
             // Unlock ExplosiveTorpedo and encyclopedia entry

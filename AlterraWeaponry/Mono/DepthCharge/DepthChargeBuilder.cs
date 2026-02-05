@@ -10,30 +10,48 @@ internal static class DepthChargeBuilder
     /// <summary>
     /// Creates the depth charge game object
     /// </summary>
-    public static GameObject CreateGameObject(TechType techType)
+    public static GameObject? CreateGameObject(TechType techType)
     {
         try
         {
+            Main.logger.LogInfo("DepthChargeBuilder.CreateGameObject - Starting creation");
             var go = new GameObject("DepthCharge");
+            Main.logger.LogInfo("DepthChargeBuilder.CreateGameObject - GameObject created");
 
             SetupMeshAndRenderer(go);
+            Main.logger.LogInfo("DepthChargeBuilder.CreateGameObject - Mesh and renderer setup complete");
+
             SetupPhysics(go);
+            Main.logger.LogInfo("DepthChargeBuilder.CreateGameObject - Physics setup complete");
+
             SetupWorldComponents(go, techType);
+            Main.logger.LogInfo("DepthChargeBuilder.CreateGameObject - World components setup complete");
+
             SetupCollider(go);
+            Main.logger.LogInfo("DepthChargeBuilder.CreateGameObject - Collider setup complete");
+
             SetupVFXAndBehavior(go);
+            Main.logger.LogInfo("DepthChargeBuilder.CreateGameObject - VFX and behavior setup complete");
+
             SetupLiveMixin(go);
+            Main.logger.LogInfo("DepthChargeBuilder.CreateGameObject - LiveMixin setup complete");
+
             SetupIndicatorLight(go);
+            Main.logger.LogInfo("DepthChargeBuilder.CreateGameObject - Indicator light setup complete");
 
             MaterialUtils.ApplySNShaders(go);
+            Main.logger.LogInfo("DepthChargeBuilder.CreateGameObject - Shaders applied");
+
             go.tag = "Untagged";
             go.layer = 0;
 
+            Main.logger.LogInfo("DepthChargeBuilder.CreateGameObject - Creation successful, returning GameObject");
             return go;
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            Main.logger.LogError($"Failed to create Depth Charge prefab: {e}");
-            throw;
+            Main.logger.LogError($"DepthChargeBuilder.CreateGameObject() FAILED: {ex.Message}\n{ex.StackTrace}");
+            return null;
         }
     }
 
@@ -102,8 +120,8 @@ internal static class DepthChargeBuilder
     private static void SetupVFXAndBehavior(GameObject go)
     {
         var vfx = go.EnsureComponent<VFXFabricating>();
-        vfx.scaleFactor = 0.25f;
-        vfx.posOffset = new Vector3(0f, 0.5f, 0f);
+        vfx.scaleFactor = 0.5f;
+        vfx.posOffset = new Vector3(0f, 0.1f, 0f);
         go.EnsureComponent<DepthChargeManager>();
         go.EnsureComponent<DepthChargeAudioVisual>();
     }

@@ -51,14 +51,9 @@ internal class DepthCharge
             ]
         };
 
-        Main.logger.LogDebug("Creating DepthCharge prefab.");
         CustomPrefab customPrefab = new(Info);
-        Main.logger.LogDebug("Created DepthCharge prefab.");
 
-        Main.logger.LogInfo("Creating DepthCharge GameObject.");
-        var go = DepthChargeBuilder.CreateGameObject(TechType);
-        Main.logger.LogInfo("Created DepthCharge GameObject.");
-        customPrefab.SetGameObject(go);
+        customPrefab.SetGameObject(() => DepthChargeBuilder.CreateGameObject(TechType));
         customPrefab.SetUnlock(BlackPowder.TechType);
         customPrefab.SetPdaGroupCategoryBefore(TechGroup.Personal, TechCategory.Equipment, TechType.Seaglide);
         customPrefab.SetRecipe(recipe)

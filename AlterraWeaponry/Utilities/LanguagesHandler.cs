@@ -36,39 +36,24 @@
         private static string filename = "Localizations.xml";
         public static void LanguagePatch()
         {
-            Main.logger.LogInfo("Starting patching the languages !");
             XmlSerializer serializer = new(typeof(LocalizationHandler.LocalizationPackages));
 
             FileStream fs = new(Path.Combine(ModPath, filename), FileMode.Open, FileAccess.Read);
             LocalizationHandler.LocalizationPackages lps;
 
-            Main.logger.LogInfo(Language.main.GetCurrentLanguage());
-
             lps = (LocalizationHandler.LocalizationPackages)serializer.Deserialize(fs);
-
-            foreach (LocalizationHandler.LocalizationPackage localizationpack in lps.Localizations)
-                Main.logger.LogInfo(localizationpack.Lang);
-            Main.logger.LogInfo("All LPs logged.");
 
             foreach (LocalizationHandler.Text text in lps.Localizations.Single(lp => lps.Localizations.Any(lp1 => lp1.Lang == Language.main.GetCurrentLanguage()) ? lp.Lang == Language.main.GetCurrentLanguage() : lp.Lang == Language.defaultLanguage).Texts)
             {
-                Main.logger.LogInfo($"Checking string, key {text.key}");
                 if (Language.main.Get(text.key) != null)
                 {
                     LanguageHandler.SetLanguageLine(text.key, text.value);
-                    Main.logger.LogInfo($"Patched key {text.key} with text '{(text.value.Length > 50 ? text.value.Substring(0, 50) + "..." : text.value)}'");
-                }
-                else
-                {
-                    Main.logger.LogInfo($"Key {text.key} does not reference any key in game. Please check the case.");
                 }
             }
-            Main.logger.LogInfo("Language patching done.");
         }
 
         public static void GlobalPatch()
         {
-            Main.logger.LogInfo("Starting global patching...");
             XmlSerializer serializer = new(typeof(LocalizationHandler.LocalizationPackages));
 
             FileStream fs = new(Path.Combine(ModPath, filename), FileMode.Open, FileAccess.Read);
@@ -78,14 +63,12 @@
 
             foreach (LocalizationHandler.LocalizationPackage locpack in lps.Localizations)
             {
-                Main.logger.LogInfo(locpack.Lang);
-
                 foreach (LocalizationHandler.Text text in locpack.Texts)
                 {
                     if (string.IsNullOrEmpty(text.value))
                         continue;
+
                     LanguageHandler.SetLanguageLine(text.key, text.value, locpack.Lang);
-                    Main.logger.LogInfo($"Patched key {text.key} with text '{(text.value.Length > 50 ? text.value.Substring(0, 50) + "..." : text.value)}'");
                 }
             }
         }

@@ -2,6 +2,16 @@
 
 > **Important Note**: This is a community port of the original Subnautica: Below Zero mod created by [VELD](https://github.com/VELD-Dev/). All of this mod's functionality and design up to version 1.0.5 was created by [VELD-DEV](https://github.com/VELD-DEV). This changelog documents the changes made for the Subnautica port.
 
+## [1.1.1] - Subnautica Port - 2026-02-05
+
+### Fixed
+- Naval mines complete rework
+  - No need to manually prime anymore
+  - Flashing red indicator light
+  - Improved VFX
+  - Spatial audio
+  - Better state management
+
 ## [1.1.0] - Subnautica Port - 2026-02-01
 
 ### Added

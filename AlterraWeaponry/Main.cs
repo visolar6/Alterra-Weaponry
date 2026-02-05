@@ -6,8 +6,8 @@ public class Main : BaseUnityPlugin
     // MOD INFO
     internal const string modName = "Alterra Weaponry";
     internal const string modGUID = "com.VELD.AlterraWeaponry";
-    internal const string modVers = "1.1.0";
-    internal const string modLongVers = "1.1.0.0";
+    internal const string modVers = "1.1.1";
+    internal const string modLongVers = "1.1.1.0";
 
     // BepInEx/Harmony/Unity
     private static readonly Harmony harmony = new(modGUID);
@@ -28,9 +28,14 @@ public class Main : BaseUnityPlugin
         logger = Logger;
         try
         {
-            AssetsCache = ResourcesCacheManager.LoadResources(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "sn.alterraweaponry.assets"));
-            BannerAssetsCache = ResourcesCacheManager.LoadResources(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "sn.alterraweaponry_banners.assets"));
-            logger.LogInfo("Successfully loaded resources to cache.");
+            var basePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+            AssetsCache = ResourcesCacheManager.LoadResources(Path.Combine(basePath, "sn.alterraweaponry.assets"));
+            BannerAssetsCache = ResourcesCacheManager.LoadResources(Path.Combine(basePath, "sn.alterraweaponry_banners.assets"));
+
+            var soundSource = new ModFolderSoundSource(Path.Combine(basePath, "Assets", "Audio"));
+            var builder = new FModSoundBuilder(soundSource);
+            ExplosionAudio.RegisterEvents(builder);
         }
         catch (Exception ex)
         {

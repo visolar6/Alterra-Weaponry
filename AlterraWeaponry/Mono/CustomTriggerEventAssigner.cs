@@ -32,7 +32,6 @@ public class CustomTriggerStoryGoalAssigner : MonoBehaviour
 
     private void OnTriggerEnter(Collision collision)
     {
-        Main.logger.LogInfo("Custom collider triggered.");
         bool flag = this.storyGoal != null;
         if(!flag)
         {
@@ -40,15 +39,11 @@ public class CustomTriggerStoryGoalAssigner : MonoBehaviour
             return;
         }
 
-        Main.logger.LogInfo($"Trying to play storyGoal {this.storyGoal.key}");
         this.storyGoal.Trigger();
-        Main.logger.LogInfo($"Has finished playing storyGoal {this.storyGoal.key}");
 
         bool flag2 = this.action != null;
         if(flag2) {
-            Main.logger.LogInfo("Trigger Callback is trying to invoke Action...");
             this.action.Invoke();
-            Main.logger.LogInfo("Trigger Callback has successfully executed Action");
         }
     }
 

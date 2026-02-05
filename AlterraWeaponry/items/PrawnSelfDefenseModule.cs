@@ -93,7 +93,7 @@ public class PrawnSelfDefenseModule
             {
                 if (!instance.gameObject.TryGetComponent(out ZapFunctionalityBehaviour defenseMono))
                     defenseMono = instance.gameObject.EnsureComponent<ZapFunctionalityBehaviour>();
-                Main.logger.LogInfo("Zapping !");
+
                 try
                 {
                     defenseMono.Zap(instance, slotID, charge, chargeScalar);
@@ -103,7 +103,6 @@ public class PrawnSelfDefenseModule
                     Main.logger.LogError($"Cannot use the defense mono.\nError:");
                     Main.logger.LogError(e);
                 }
-                Main.logger.LogInfo("Zapped !");
             });
 
         customPrefab.SetRecipe(recipe)
